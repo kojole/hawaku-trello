@@ -9,7 +9,7 @@ function doAssign(t, opts) {
   console.log('Someone clicked the button');
 
   return t.lists('all').then(function(lists) {
-    console.log(JSON.stringify(cards, null, 2));
+    console.log(JSON.stringify(lists, null, 2));
   });
 }
 
@@ -21,7 +21,7 @@ window.TrelloPowerUp.initialize({
           dark: WHITE_ICON,
           light: BLACK_ICON
         },
-        text: '割り当てを実行する！！！',
+        text: '当番を決める！',
         callback: doAssign,
         condition: 'edit'
       }
