@@ -1,3 +1,4 @@
+const Trello = window.Trello;
 const Promise = window.TrelloPowerUp.Promise;
 
 const WHITE_ICON =
@@ -12,7 +13,9 @@ function doAssign(t, opts) {
   //   console.log(JSON.stringify(lists, null, 2));
   // });
 
-  window.Trello.authorize({
+  console.log('authorized', Trello.authorized());
+
+  Trello.authorize({
     type: 'popup',
     name: 'hawaku-trello',
     scope: {
