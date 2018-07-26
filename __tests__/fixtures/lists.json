@@ -1,0 +1,518 @@
+[
+  {
+    "id": "5b5165fe95d13ee66c371780",
+    "name": "する人",
+    "cards": [
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:35:56.469Z",
+        "desc": "```json\n{\n  \"女子トイレ\": 50,\n  \"掃除機\": 20,\n  \"ゴミ捨て\": 30\n}\n```",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b51661ec2b420659dc08d57",
+        "idList": "5b5165fe95d13ee66c371780",
+        "idShort": 1,
+        "labels": [
+          {
+            "id": "5b5166acbaa88a7dbd5eb561",
+            "name": "女性",
+            "color": "red"
+          }
+        ],
+        "members": [],
+        "name": "アリス",
+        "shortLink": "zj00eXNC",
+        "url": "https://trello.com/c/zj00eXNC/1-%E3%82%A2%E3%83%AA%E3%82%B9"
+      },
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:36:28.382Z",
+        "desc": "```json\n{\n  \"男子トイレ\": 20,\n  \"掃除機\": 30,\n  \"ゴミ捨て\": 50\n}\n```",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b51661f2184355a03c31e84",
+        "idList": "5b5165fe95d13ee66c371780",
+        "idShort": 2,
+        "labels": [
+          {
+            "id": "5b5166cc3604518401198158",
+            "name": "男性",
+            "color": "blue"
+          }
+        ],
+        "members": [],
+        "name": "ボブ",
+        "shortLink": "sGHJg79i",
+        "url": "https://trello.com/c/sGHJg79i/2-%E3%83%9C%E3%83%96"
+      },
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:36:12.168Z",
+        "desc": "```json\n{\n  \"女子トイレ\": 2,\n  \"掃除機\": 3,\n  \"ゴミ捨て\": 5\n}\n```",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b516654a16c303c6f577070",
+        "idList": "5b5165fe95d13ee66c371780",
+        "idShort": 3,
+        "labels": [
+          {
+            "id": "5b5166acbaa88a7dbd5eb561",
+            "name": "女性",
+            "color": "red"
+          }
+        ],
+        "members": [],
+        "name": "キャロル",
+        "shortLink": "LP3g0emh",
+        "url": "https://trello.com/c/LP3g0emh/3-%E3%82%AD%E3%83%A3%E3%83%AD%E3%83%AB"
+      },
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:36:42.798Z",
+        "desc": "```json\n{\n  \"男子トイレ\": 5, \n  \"掃除機\": 3,\n  \"ゴミ捨て\": 2\n}\n```",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b516661a43df26ebdbe5468",
+        "idList": "5b5165fe95d13ee66c371780",
+        "idShort": 4,
+        "labels": [
+          {
+            "id": "5b5166cc3604518401198158",
+            "name": "男性",
+            "color": "blue"
+          }
+        ],
+        "members": [],
+        "name": "デイブ",
+        "shortLink": "EIoDwSXK",
+        "url": "https://trello.com/c/EIoDwSXK/4-%E3%83%87%E3%82%A4%E3%83%96"
+      }
+    ]
+  },
+  {
+    "id": "5b5166047c970409cc702289",
+    "name": "しない人",
+    "cards": [
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:37:07.081Z",
+        "desc": "",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b516667d85701656647b3ca",
+        "idList": "5b5166047c970409cc702289",
+        "idShort": 5,
+        "labels": [
+          {
+            "id": "5b5166acbaa88a7dbd5eb561",
+            "name": "女性",
+            "color": "red"
+          }
+        ],
+        "members": [],
+        "name": "エレン",
+        "shortLink": "QoxjWJUe",
+        "url": "https://trello.com/c/QoxjWJUe/5-%E3%82%A8%E3%83%AC%E3%83%B3"
+      },
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:37:08.508Z",
+        "desc": "",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b516668b659273c711d307c",
+        "idList": "5b5166047c970409cc702289",
+        "idShort": 6,
+        "labels": [
+          {
+            "id": "5b5166cc3604518401198158",
+            "name": "男性",
+            "color": "blue"
+          }
+        ],
+        "members": [],
+        "name": "フランク",
+        "shortLink": "MciQoSpG",
+        "url": "https://trello.com/c/MciQoSpG/6-%E3%83%95%E3%83%A9%E3%83%B3%E3%82%AF"
+      }
+    ]
+  },
+  {
+    "id": "5b5166096459a827d1a19b51",
+    "name": "する仕事",
+    "cards": [
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:39:42.871Z",
+        "desc": "",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b51670ec35c9188eedd0e20",
+        "idList": "5b5166096459a827d1a19b51",
+        "idShort": 7,
+        "labels": [
+          {
+            "id": "5b5166cc3604518401198158",
+            "name": "男性",
+            "color": "blue"
+          }
+        ],
+        "members": [],
+        "name": "男子トイレ",
+        "shortLink": "dA5kdHzo",
+        "url": "https://trello.com/c/dA5kdHzo/7-%E7%94%B7%E5%AD%90%E3%83%88%E3%82%A4%E3%83%AC"
+      },
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:39:43.738Z",
+        "desc": "",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b516711d804bab6fd6e80d7",
+        "idList": "5b5166096459a827d1a19b51",
+        "idShort": 8,
+        "labels": [
+          {
+            "id": "5b5166acbaa88a7dbd5eb561",
+            "name": "女性",
+            "color": "red"
+          }
+        ],
+        "members": [],
+        "name": "女子トイレ",
+        "shortLink": "pfaB4ULg",
+        "url": "https://trello.com/c/pfaB4ULg/8-%E5%A5%B3%E5%AD%90%E3%83%88%E3%82%A4%E3%83%AC"
+      },
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:37:39.485Z",
+        "desc": "",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b5167133013db7d86329ec8",
+        "idList": "5b5166096459a827d1a19b51",
+        "idShort": 9,
+        "labels": [],
+        "members": [],
+        "name": "掃除機",
+        "shortLink": "mIll9V2k",
+        "url": "https://trello.com/c/mIll9V2k/9-%E6%8E%83%E9%99%A4%E6%A9%9F"
+      },
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:37:49.851Z",
+        "desc": "",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b51671dbc6c6a7d5bcec539",
+        "idList": "5b5166096459a827d1a19b51",
+        "idShort": 10,
+        "labels": [],
+        "members": [],
+        "name": "ゴミ捨て",
+        "shortLink": "ow6hyhas",
+        "url": "https://trello.com/c/ow6hyhas/10-%E3%82%B4%E3%83%9F%E6%8D%A8%E3%81%A6"
+      }
+    ]
+  },
+  {
+    "id": "5b5167e3d3198ab3702e5f2e",
+    "name": "しない仕事",
+    "cards": [
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:41:14.618Z",
+        "desc": "",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b5167eaaac4467dd444d22d",
+        "idList": "5b5167e3d3198ab3702e5f2e",
+        "idShort": 11,
+        "labels": [],
+        "members": [],
+        "name": "ホワイトボード",
+        "shortLink": "ryiRlEzi",
+        "url": "https://trello.com/c/ryiRlEzi/11-%E3%83%9B%E3%83%AF%E3%82%A4%E3%83%88%E3%83%9C%E3%83%BC%E3%83%89"
+      },
+      {
+        "attachments": [],
+        "badges": {
+          "votes": 0,
+          "attachmentsByType": {
+            "trello": {
+              "board": 0,
+              "card": 0
+            }
+          },
+          "viewingMemberVoted": false,
+          "subscribed": false,
+          "fogbugz": "",
+          "checkItems": 0,
+          "checkItemsChecked": 0,
+          "comments": 0,
+          "attachments": 0,
+          "description": false,
+          "due": null,
+          "dueComplete": false
+        },
+        "closed": false,
+        "cover": null,
+        "customFieldItems": [],
+        "dateLastActivity": "2018-07-20T04:41:25.926Z",
+        "desc": "",
+        "due": null,
+        "dueComplete": false,
+        "id": "5b5167f5c1e3398ac111072d",
+        "idList": "5b5167e3d3198ab3702e5f2e",
+        "idShort": 12,
+        "labels": [],
+        "members": [],
+        "name": "椅子コロコロ",
+        "shortLink": "3g9nqIFe",
+        "url": "https://trello.com/c/3g9nqIFe/12-%E6%A4%85%E5%AD%90%E3%82%B3%E3%83%AD%E3%82%B3%E3%83%AD"
+      }
+    ]
+  }
+]
