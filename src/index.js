@@ -39,12 +39,7 @@ function doAssign(t, opts) {
         console.log('No roles');
         return;
       }
-
       const assignments = Models.assignRolesToUsers(users, roles);
-      if (assignments.length === 0) {
-        console.log('Failed to assign');
-        return;
-      }
 
       const idList = '5b5a79e5f664ffca9b1fc57c';
       const name = new Intl.DateTimeFormat('ja-JP', {

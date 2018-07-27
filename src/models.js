@@ -42,8 +42,18 @@ class Stats {
 
 function assignRolesToUsers(users, roles) {
   const assignments = [];
-  while (roles.length > 0) {
-    const role = roles.shift();
+
+  for (const role of roles) {
+    if (users.length === 0) {
+      assignments.push({
+        user: {
+          name: 'なし',
+          id: null
+        },
+        role
+      });
+      continue;
+    }
 
     if (role.sex !== 0) {
       const sUsers = users.filter(u => u.sex === role.sex);
