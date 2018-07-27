@@ -1,3 +1,5 @@
+const Models = require('./models');
+
 const Trello = window.Trello;
 const Promise = window.TrelloPowerUp.Promise;
 
@@ -25,22 +27,43 @@ function authorize() {
 }
 
 function doAssign(t, opts) {
-  console.log('doAssign start');
+  return authorize()
+    .then(() => t.lists('all'))
+    .then(lists => {
+      const [users, roles] = Models.fromListsJSON(lists);
+      if (users.length === 0) {
+        console.log('No users');
+        return;
+      }
+      if (roles.length === 0) {
+        console.log('No roles');
+        return;
+      }
 
-  // return t.lists('all').then(function(lists) {
-  //   console.log(JSON.stringify(lists, null, 2));
-  // });
+      const assignments = Models.assignRolesToUsers(users, roles);
+      if (assignments.length === 0) {
+        console.log('Failed to assign');
+        return;
+      }
 
-  return authorize().then(() => {
-    return new Promise((resolve, reject) =>
-      Trello.post(
-        'cards',
-        { idList: '5b5165fe95d13ee66c371780', name: 'new card!' },
-        resolve,
-        reject
-      )
-    );
-  });
+      const idList = '5b5a79e5f664ffca9b1fc57c';
+      const name = new Intl.DateTimeFormat('ja-JP', {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        weekday: 'short'
+      }).format(new Date());
+      const desc = '```json\n' + JSON.stringify(assignments, null, 2) + '\n```';
+
+      return new Promise((resolve, reject) =>
+        Trello.post(
+          'cards',
+          { idList, name, desc, pos: 'top' },
+          resolve,
+          reject
+        )
+      );
+    });
 }
 
 window.TrelloPowerUp.initialize({

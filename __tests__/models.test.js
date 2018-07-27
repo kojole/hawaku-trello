@@ -61,13 +61,28 @@ test('fromListsJSON', () => {
 
 test('assignRolesToUsers', () => {
   const assignments = Models.assignRolesToUsers(defaultUsers(), defaultRoles());
+  const json = assignments.toJSON();
 
-  expect(assignments[0]).toHaveProperty('user.name', 'ボブ');
-  expect(assignments[0]).toHaveProperty('role.name', '男子トイレ');
-  expect(assignments[1]).toHaveProperty('user.name', 'キャロル');
-  expect(assignments[1]).toHaveProperty('role.name', '女子トイレ');
-  expect(assignments[2]).toHaveProperty('user.name', 'アリス');
-  expect(assignments[2]).toHaveProperty('role.name', '掃除機');
-  expect(assignments[3]).toHaveProperty('user.name', 'デイブ');
-  expect(assignments[3]).toHaveProperty('role.name', 'ゴミ捨て');
+  expect(json).toEqual([
+    {
+      user: 'ボブ',
+      role: '男子トイレ',
+      id: '5b51661f2184355a03c31e84'
+    },
+    {
+      user: 'キャロル',
+      role: '女子トイレ',
+      id: '5b516654a16c303c6f577070'
+    },
+    {
+      user: 'アリス',
+      role: '掃除機',
+      id: '5b51661ec2b420659dc08d57'
+    },
+    {
+      user: 'デイブ',
+      role: 'ゴミ捨て',
+      id: '5b516661a43df26ebdbe5468'
+    }
+  ]);
 });

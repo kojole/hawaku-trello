@@ -81,6 +81,15 @@ function assignRolesToUsers(users, roles) {
     });
   }
 
+  // To refer itself by `this`, avoid an arrow function syntax
+  assignments.toJSON = function() {
+    return this.map(({ user, role }) => ({
+      user: user.name,
+      role: role.name,
+      id: user.id
+    }));
+  };
+
   return assignments;
 }
 
