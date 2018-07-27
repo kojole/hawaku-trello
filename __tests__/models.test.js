@@ -1,6 +1,8 @@
 const Models = require('../src/models');
 const { Role, Stats, User } = Models;
 
+const defaultDate = new Date('2018-07-27T04:44:00.000Z');
+
 const defaultUsers = () => [
   new User(
     '5b51661ec2b420659dc08d57',
@@ -10,7 +12,8 @@ const defaultUsers = () => [
       女子トイレ: 50,
       掃除機: 20,
       ゴミ捨て: 30
-    })
+    }),
+    defaultDate
   ),
   new User(
     '5b51661f2184355a03c31e84',
@@ -20,7 +23,8 @@ const defaultUsers = () => [
       男子トイレ: 20,
       掃除機: 30,
       ゴミ捨て: 50
-    })
+    }),
+    defaultDate
   ),
   new User(
     '5b516654a16c303c6f577070',
@@ -30,7 +34,8 @@ const defaultUsers = () => [
       女子トイレ: 2,
       掃除機: 3,
       ゴミ捨て: 5
-    })
+    }),
+    defaultDate
   ),
   new User(
     '5b516661a43df26ebdbe5468',
@@ -40,7 +45,8 @@ const defaultUsers = () => [
       男子トイレ: 5,
       掃除機: 3,
       ゴミ捨て: 2
-    })
+    }),
+    defaultDate
   )
 ];
 

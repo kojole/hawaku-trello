@@ -9,6 +9,26 @@ function sexFromLabelsJSON(labels) {
   return 0;
 }
 
+function metaFromJSONCodeBlock(md) {
+  md = md.trim();
+  const re = /^```json\n([\s\S]*)\n```$/;
+  const found = md.match(re);
+  if (found) {
+    try {
+      const { stats, updatedAt } = JSON.parse(found[1]);
+      return {
+        stats: new Stats(stats),
+        updatedAt: new Date(updatedAt)
+      };
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  return {
+    stats: new Stats()
+  };
+}
+
 class Stats {
   constructor(counts = {}) {
     this.counts = counts;
@@ -24,21 +44,6 @@ class Stats {
       return 0;
     }
     return this.count(name) / this.total;
-  }
-
-  static tryFromJSONCodeBlock(md) {
-    md = md.trim();
-    const re = /^```json\n([\s\S]*)\n```$/;
-    const found = md.match(re);
-    if (found) {
-      try {
-        const statsJSON = JSON.parse(found[1]);
-        return new Stats(statsJSON);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    return new Stats();
   }
 }
 
@@ -108,17 +113,18 @@ function assignRolesToUsers(users, roles) {
 }
 
 class User {
-  constructor(id, name, sex = 0, stats = {}) {
+  constructor(id, name, sex = 0, stats = {}, updatedAt) {
     this.id = id;
     this.name = name;
     this.sex = sex;
     this.stats = stats;
+    this.updatedAt = updatedAt;
   }
 
   static fromCardJSON(card) {
     const sex = sexFromLabelsJSON(card.labels);
-    const stats = Stats.tryFromJSONCodeBlock(card.desc);
-    return new User(card.id, card.name, sex, stats);
+    const { stats, updatedAt } = metaFromJSONCodeBlock(card.desc);
+    return new User(card.id, card.name, sex, stats, updatedAt);
   }
 }
 
