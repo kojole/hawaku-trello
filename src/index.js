@@ -54,7 +54,10 @@ function doAssign(t, opts) {
         Trello.post(
           'cards',
           { idList, name, desc, pos: 'top' },
-          resolve,
+          data => {
+            console.log('POST success', data);
+            resolve();
+          },
           reject
         )
       );
