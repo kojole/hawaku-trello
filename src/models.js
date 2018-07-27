@@ -1,3 +1,5 @@
+const { shuffle } = require('./random');
+
 function sexFromLabelsJSON(labels) {
   if (labels.find(label => label.name === '男性')) {
     return 1;
@@ -42,6 +44,8 @@ class Stats {
 
 function assignRolesToUsers(users, roles) {
   const assignments = [];
+
+  shuffle(users);
 
   for (const role of roles) {
     if (users.length === 0) {
