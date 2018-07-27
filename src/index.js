@@ -55,8 +55,12 @@ function doAssign(t, opts) {
           'cards',
           { idList, name, desc, pos: 'top' },
           card => {
-            t.showCard(card.id);
-            resolve();
+            console.log('POST success:', card.id);
+            // Wait for the newly created card to appear
+            setTimeout(() => {
+              t.showCard(card.id);
+              resolve();
+            }, 500);
           },
           reject
         )
