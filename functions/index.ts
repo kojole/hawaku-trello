@@ -4,8 +4,8 @@ interface Properties {
 }
 
 const idBorad = '5b516576029770d195c0f7c2';
-const idRolesLists = ['5b5165fe95d13ee66c371780', '5b5166047c970409cc702289'];
-const idUsersLists = ['5b5166096459a827d1a19b51', '5b5167e3d3198ab3702e5f2e'];
+const idRolesLists = ['5b5166096459a827d1a19b51', '5b5167e3d3198ab3702e5f2e'];
+const idUsersLists = ['5b5165fe95d13ee66c371780', '5b5166047c970409cc702289'];
 
 function initializeUsers() {
   const {
