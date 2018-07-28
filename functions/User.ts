@@ -25,7 +25,7 @@ class User {
   }
 
   static fromJSON(card: CardJSON): User {
-    const { stats, updatedAt } = this.metaFromDesc(card.desc);
+    const { stats, updatedAt } = User.metaFromDesc(card.desc);
     return new User(card.id, card.name, card.desc, stats, updatedAt);
   }
 
