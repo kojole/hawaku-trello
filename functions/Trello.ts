@@ -61,7 +61,7 @@ function _toQuery(params: { [key: string]: string }) {
   return (
     '?' +
     Object.keys(params)
-      .map(k => `k=${encodeURIComponent(params[k])}`)
+      .map(k => k + '=' + encodeURIComponent(params[k]))
       .join('&')
   );
 }
