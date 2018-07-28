@@ -1,4 +1,5 @@
 const Models = require('./models');
+const config = require('./config');
 
 const Trello = window.Trello;
 const Promise = window.TrelloPowerUp.Promise;
@@ -41,7 +42,7 @@ function doAssign(t, opts) {
       }
       const assignments = Models.assignRolesToUsers(users, roles);
 
-      const idList = '5b5a79e5f664ffca9b1fc57c';
+      const idList = config.idResultsList;
       const name = new Intl.DateTimeFormat('ja-JP', {
         year: 'numeric',
         month: 'numeric',

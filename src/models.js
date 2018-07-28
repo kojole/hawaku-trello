@@ -1,3 +1,4 @@
+const config = require('./config');
 const { shuffle } = require('./random');
 
 function sexFromLabelsJSON(labels) {
@@ -143,8 +144,8 @@ function fromListsJSON(json) {
   let users = [];
   let roles = [];
 
-  const usersList = json.filter(list => list.name === 'する人')[0];
-  const rolesList = json.filter(list => list.name === 'する仕事')[0];
+  const usersList = json.filter(list => list.id === config.idRolesList)[0];
+  const rolesList = json.filter(list => list.id === config.idRolesList)[0];
 
   if (usersList) {
     users = usersList.cards.map(User.fromCardJSON);
