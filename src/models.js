@@ -1,10 +1,11 @@
 const config = require('./config');
 const { shuffle } = require('./random');
 
-function sexFromIdLabels(idLabels) {
-  if (idLabels.includes(config.idMaleLabel)) {
+function sexFromLabelsJSON(labels) {
+  const ids = labels.map(label => label.id);
+  if (ids.includes(config.idMaleLabel)) {
     return 1;
-  } else if (idLabels.includes(config.idFemaleLabel)) {
+  } else if (ids.includes(config.idFemaleLabel)) {
     return 2;
   }
   return 0;
@@ -123,7 +124,7 @@ class User {
   }
 
   static fromCardJSON(card) {
-    const sex = sexFromIdLabels(card.idLabels);
+    const sex = sexFromLabelsJSON(card.labels);
     const { stats, updatedAt } = metaFromJSONCodeBlock(card.desc);
     return new User(card.id, card.name, sex, stats, updatedAt);
   }
@@ -136,7 +137,7 @@ class Role {
   }
 
   static fromCardJSON(card) {
-    return new Role(card.name, sexFromIdLabels(card.idLabels));
+    return new Role(card.name, sexFromLabelsJSON(card.labels));
   }
 }
 
