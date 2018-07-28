@@ -144,7 +144,7 @@ function fromListsJSON(json) {
   let users = [];
   let roles = [];
 
-  const usersList = json.filter(list => list.id === config.idRolesList)[0];
+  const usersList = json.filter(list => list.id === config.idUsersList)[0];
   const rolesList = json.filter(list => list.id === config.idRolesList)[0];
 
   if (usersList) {
