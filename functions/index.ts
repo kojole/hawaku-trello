@@ -16,7 +16,9 @@ function initializeUsers() {
   const trello = new Trello(trelloKey, trelloToken);
   const lists = trello.getLists(idBorad);
 
-  const rolesLists = lists.filter(list => idRolesLists.includes(list.id));
+  const rolesLists = lists.filter(
+    list => list.id === idRolesLists[0] || list.id === idRolesLists[1]
+  );
   const roleNames = rolesLists
     .reduce(
       (names: string[], list) =>
@@ -25,7 +27,9 @@ function initializeUsers() {
     )
     .filter((value, index, array) => array.indexOf(value) === index);
 
-  const usersLists = lists.filter(list => idUsersLists.includes(list.id));
+  const usersLists = lists.filter(
+    list => list.id === idUsersLists[0] || list.id === idUsersLists[1]
+  );
   const users = usersLists.reduce(
     (users: User[], list) => users.concat(list.cards.map(User.fromJSON)),
     []
