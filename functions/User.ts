@@ -24,6 +24,16 @@ class User {
     return '```json\n' + JSON.stringify(meta, null, 2) + '\n```';
   }
 
+  wasAssignedTo(role: string, date: Date) {
+    if (this.stats.hasOwnProperty(role)) {
+      this.stats[role] += 1;
+    } else {
+      this.stats[role] = 1;
+    }
+    this.updatedAt = date;
+    this.dirty = true;
+  }
+
   static fromJSON(card: CardJSON): User {
     const { stats, updatedAt } = User.metaFromDesc(card.desc);
     return new User(card.id, card.name, card.desc, stats, updatedAt);

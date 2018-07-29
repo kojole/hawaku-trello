@@ -3,55 +3,54 @@ interface Properties {
   trelloToken: string;
 }
 
-const idBorad = '5b516576029770d195c0f7c2';
-const idRolesLists = ['5b5166096459a827d1a19b51', '5b5167e3d3198ab3702e5f2e'];
-const idUsersLists = ['5b5165fe95d13ee66c371780', '5b5166047c970409cc702289'];
-
-function initializeUsers() {
+function updateUserStatsFromResults() {
   const {
     trelloKey,
     trelloToken
   } = PropertiesService.getScriptProperties().getProperties() as Properties;
 
   const trello = new Trello(trelloKey, trelloToken);
-  const lists = trello.getLists(idBorad);
+  const lists = trello.getLists(config.idBorad);
 
-  const rolesLists = lists.filter(
-    list => list.id === idRolesLists[0] || list.id === idRolesLists[1]
-  );
-  const roleNames = rolesLists
-    .reduce(
-      (names: string[], list) =>
-        names.concat(list.cards.map(card => card.name)),
-      []
-    )
-    .filter((value, index, array) => array.indexOf(value) === index);
+  // Can't use Array.find
+  const resultsList = lists.filter(list => list.id === config.idResultsList)[0];
+  const results = resultsList.cards.map(card => Result.fromJSON(card));
+  results.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
-  const usersLists = lists.filter(
-    list => list.id === idUsersLists[0] || list.id === idUsersLists[1]
-  );
-  const users = usersLists.reduce(
-    (users: User[], list) => users.concat(list.cards.map(User.fromJSON)),
-    []
-  );
+  const users = _getUsersFromLists(lists);
 
-  for (const user of users) {
-    for (const roleName of roleNames) {
-      if (!user.stats.hasOwnProperty(roleName)) {
-        user.stats[roleName] = 0;
-        user.dirty = true;
+  for (const result of results) {
+    for (const assignment of result.assignments) {
+      const user = users[assignment.id];
+      if (!user) {
+        continue;
       }
+      if (user.updatedAt && user.updatedAt >= result.createdAt) {
+        continue;
+      }
+      user.wasAssignedTo(assignment.role, result.createdAt);
     }
   }
 
-  const now = new Date();
-  for (const user of users) {
+  for (const id in users) {
+    const user = users[id];
     if (user.dirty) {
-      user.updatedAt = now;
-      const desc = user.newDesc();
-      if (desc !== user.desc) {
-        trello.putCard(user.id, { desc });
-      }
+      trello.putCard(id, { desc: user.newDesc() });
     }
   }
+}
+
+function _getUsersFromLists(lists: ListJSON[]): { [id: string]: User } {
+  const users = {};
+  const usersLists = lists.filter(
+    list =>
+      list.id === config.idUsersLists[0] || list.id === config.idUsersLists[1]
+  );
+  for (const list of usersLists) {
+    for (const card of list.cards) {
+      const user = User.fromJSON(card);
+      users[user.id] = user;
+    }
+  }
+  return users;
 }

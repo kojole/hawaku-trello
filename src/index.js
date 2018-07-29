@@ -49,7 +49,8 @@ function doAssign(t, opts) {
         day: 'numeric',
         weekday: 'short',
         hour: 'numeric',
-        minute: 'numeric'
+        minute: 'numeric',
+        second: 'numeric'
       }).format(new Date());
       const desc = '```json\n' + JSON.stringify(assignments, null, 2) + '\n```';
 
