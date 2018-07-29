@@ -3,18 +3,29 @@ interface Properties {
   trelloToken: string;
 }
 
-function updateUserStatsFromResults() {
-  const {
-    trelloKey,
-    trelloToken
-  } = PropertiesService.getScriptProperties().getProperties() as Properties;
+function archiveOldResults() {
+  const trello = _newTrello();
+  const cards = trello.getCards(config.idResultsList);
 
-  const trello = new Trello(trelloKey, trelloToken);
+  // Archive 1-week old cards
+  const threshold = 7 * 24 * 60 * 60 * 1000;
+  const now = new Date();
+
+  for (const card of cards) {
+    const result = Result.fromJSON(card);
+    if (now.getTime() - result.createdAt.getTime() > threshold) {
+      trello.putCard(card.id, { closed: 'true' });
+    }
+  }
+}
+
+function updateUserStatsFromResults() {
+  const trello = _newTrello();
   const lists = trello.getLists(config.idBorad);
 
   // Can't use Array.find
   const resultsList = lists.filter(list => list.id === config.idResultsList)[0];
-  const results = resultsList.cards.map(card => Result.fromJSON(card));
+  const results = resultsList.cards.map(Result.fromJSON);
   results.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
   const users = _getUsersFromLists(lists);
@@ -38,6 +49,14 @@ function updateUserStatsFromResults() {
       trello.putCard(id, { desc: user.newDesc() });
     }
   }
+}
+
+function _newTrello(): Trello {
+  const {
+    trelloKey,
+    trelloToken
+  } = PropertiesService.getScriptProperties().getProperties() as Properties;
+  return new Trello(trelloKey, trelloToken);
 }
 
 function _getUsersFromLists(lists: ListJSON[]): { [id: string]: User } {

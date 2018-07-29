@@ -1,3 +1,7 @@
+interface Params {
+  [key: string]: string;
+}
+
 interface ListJSON {
   id: string;
   name: string;
@@ -19,31 +23,38 @@ class Trello {
     this.credentials = { key, token };
   }
 
-  getLists(idBoard: string): ListJSON[] {
-    const params = { ...this.credentials, cards: 'open' };
-    const url = `${this.endpoint}boards/${idBoard}/lists`;
-
-    const res = UrlFetchApp.fetch(url + _toQuery(params), {
-      method: 'get',
-      contentType: 'application/json',
-      muteHttpExceptions: true
-    });
-
-    const responseCode = res.getResponseCode();
-    const contentText = res.getContentText();
-    if (responseCode !== 200) {
-      throw new Error(`GET ${url} ${responseCode} ${contentText}`);
-    }
-    Logger.log(`GET ${url}`);
+  getCards(idList: string): CardJSON[] {
+    const url = `${this.endpoint}lists/${idList}/cards`;
+    const params = { fields: 'name,desc' };
+    const contentText = this.fetch('get', url, params);
     return JSON.parse(contentText);
   }
 
-  putCard(idCard: string, params: { [key: string]: any }) {
-    params = { ...this.credentials, ...params };
+  getLists(idBoard: string): ListJSON[] {
+    const url = `${this.endpoint}boards/${idBoard}/lists`;
+    const params = {
+      cards: 'open',
+      fields: 'name',
+      card_fields: 'name,desc,idLabels'
+    };
+    const contentText = this.fetch('get', url, params);
+    return JSON.parse(contentText);
+  }
+
+  putCard(idCard: string, params: Params) {
     const url = `${this.endpoint}cards/${idCard}`;
+    this.fetch('put', url, params);
+  }
+
+  private fetch(
+    method: 'get' | 'put',
+    url: string,
+    params: Params = {}
+  ): string {
+    params = { ...params, ...this.credentials };
 
     const res = UrlFetchApp.fetch(url + _toQuery(params), {
-      method: 'put',
+      method,
       contentType: 'application/json',
       muteHttpExceptions: true
     });
@@ -51,13 +62,17 @@ class Trello {
     const responseCode = res.getResponseCode();
     const contentText = res.getContentText();
     if (responseCode !== 200) {
-      throw new Error(`PUT ${url} ${responseCode} ${contentText}`);
+      throw new Error(
+        `${method.toUpperCase()} ${url} ${responseCode} ${contentText}`
+      );
     }
-    Logger.log(`PUT ${url}`);
+
+    Logger.log(`${method.toUpperCase()} ${url}`);
+    return contentText;
   }
 }
 
-function _toQuery(params: { [key: string]: string }) {
+function _toQuery(params: Params) {
   return (
     '?' +
     Object.keys(params)
