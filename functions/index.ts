@@ -3,6 +3,11 @@ interface Properties {
   trelloToken: string;
 }
 
+interface UserJSON {
+  name: string;
+  sex: number;
+}
+
 function archiveOldResults() {
   const trello = _newTrello();
   const cards = trello.getCards(config.idResultsList);
@@ -16,6 +21,24 @@ function archiveOldResults() {
     if (now.getTime() - result.createdAt.getTime() > threshold) {
       trello.putCard(card.id, { closed: 'true' });
     }
+  }
+}
+
+function createUsers(users: UserJSON[]) {
+  const trello = _newTrello();
+  for (const user of users) {
+    let idLabels = '';
+    if (user.sex === 1) {
+      idLabels = config.idMaleLabel;
+    } else if (user.sex === 2) {
+      idLabels = config.idFemaleLabel;
+    }
+
+    trello.postCard({
+      name: user.name,
+      idList: config.idUsersLists[0],
+      idLabels
+    });
   }
 }
 

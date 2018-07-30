@@ -41,13 +41,18 @@ class Trello {
     return JSON.parse(contentText);
   }
 
+  postCard(params: Params) {
+    const url = `${this.endpoint}cards`;
+    this.fetch('post', url, params);
+  }
+
   putCard(idCard: string, params: Params) {
     const url = `${this.endpoint}cards/${idCard}`;
     this.fetch('put', url, params);
   }
 
   private fetch(
-    method: 'get' | 'put',
+    method: 'get' | 'post' | 'put',
     url: string,
     params: Params = {}
   ): string {
