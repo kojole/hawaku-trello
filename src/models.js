@@ -98,7 +98,7 @@ function assignRolesToUsers(users, roles) {
   for (const user of users) {
     assignments.push({
       user,
-      role: new Role('なし')
+      role: Role.none()
     });
   }
 
@@ -107,7 +107,8 @@ function assignRolesToUsers(users, roles) {
     return this.map(({ user, role }) => ({
       user: user.name,
       role: role.name,
-      id: user.id
+      userId: user.id,
+      roleId: role.id
     }));
   };
 
@@ -131,13 +132,19 @@ class User {
 }
 
 class Role {
-  constructor(name, sex = 0) {
+  constructor(id, name, sex = 0) {
+    this.id = id;
     this.name = name;
     this.sex = sex;
   }
 
   static fromCardJSON(card) {
-    return new Role(card.name, sexFromLabelsJSON(card.labels));
+    return new Role(card.id, card.name, sexFromLabelsJSON(card.labels));
+  }
+
+  static none() {
+    // Use `NULL` string for ID
+    return new Role('NULL', 'なし');
   }
 }
 

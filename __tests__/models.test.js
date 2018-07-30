@@ -51,10 +51,10 @@ const defaultUsers = () => [
 ];
 
 const defaultRoles = () => [
-  new Role('男子トイレ', 1),
-  new Role('女子トイレ', 2),
-  new Role('掃除機'),
-  new Role('ゴミ捨て')
+  new Role('5b51670ec35c9188eedd0e20', '男子トイレ', 1),
+  new Role('5b516711d804bab6fd6e80d7', '女子トイレ', 2),
+  new Role('5b5167133013db7d86329ec8', '掃除機'),
+  new Role('5b51671dbc6c6a7d5bcec539', 'ゴミ捨て')
 ];
 
 test('fromListsJSON', () => {
@@ -73,22 +73,26 @@ test('assignRolesToUsers', () => {
     {
       user: 'ボブ',
       role: '男子トイレ',
-      id: '5b51661f2184355a03c31e84'
+      userId: '5b51661f2184355a03c31e84',
+      roleId: '5b51670ec35c9188eedd0e20'
     },
     {
       user: 'キャロル',
       role: '女子トイレ',
-      id: '5b516654a16c303c6f577070'
+      userId: '5b516654a16c303c6f577070',
+      roleId: '5b516711d804bab6fd6e80d7'
     },
     {
       user: 'アリス',
       role: '掃除機',
-      id: '5b51661ec2b420659dc08d57'
+      userId: '5b51661ec2b420659dc08d57',
+      roleId: '5b5167133013db7d86329ec8'
     },
     {
       user: 'デイブ',
       role: 'ゴミ捨て',
-      id: '5b516661a43df26ebdbe5468'
+      userId: '5b516661a43df26ebdbe5468',
+      roleId: '5b51671dbc6c6a7d5bcec539'
     }
   ]);
 });

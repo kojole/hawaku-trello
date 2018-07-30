@@ -55,14 +55,14 @@ function updateUserStatsFromResults() {
 
   for (const result of results) {
     for (const assignment of result.assignments) {
-      const user = users[assignment.id];
+      const user = users[assignment.userId];
       if (!user) {
         continue;
       }
       if (user.updatedAt && user.updatedAt >= result.createdAt) {
         continue;
       }
-      user.wasAssignedTo(assignment.role, result.createdAt);
+      user.wasAssignedTo(assignment.roleId, result.createdAt);
     }
   }
 

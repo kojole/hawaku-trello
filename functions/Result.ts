@@ -1,7 +1,8 @@
 interface Assignment {
   user: string;
   role: string;
-  id: string | null;
+  userId: string | null;
+  roleId: string;
 }
 
 class Result {
