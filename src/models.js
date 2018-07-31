@@ -37,15 +37,15 @@ class Stats {
     this.total = Object.values(counts).reduce((acc, crr) => acc + crr, 0);
   }
 
-  count(name) {
-    return this.counts[name] || 0;
+  count(id) {
+    return this.counts[id] || 0;
   }
 
-  normalizedCount(name) {
+  normalizedCount(id) {
     if (this.total === 0) {
       return 0;
     }
-    return this.count(name) / this.total;
+    return this.count(id) / this.total;
   }
 }
 
@@ -71,8 +71,7 @@ function assignRolesToUsers(users, roles) {
       if (sUsers.length > 0) {
         sUsers.sort(
           (a, b) =>
-            a.stats.normalizedCount(role.name) -
-            b.stats.normalizedCount(role.name)
+            a.stats.normalizedCount(role.id) - b.stats.normalizedCount(role.id)
         );
 
         const user = sUsers[0];
