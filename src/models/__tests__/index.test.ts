@@ -1,5 +1,7 @@
-const Models = require('../src/models');
-const { Role, Stats, User } = Models;
+import Role from '../Role';
+import Stats from '../Stats';
+import User from '../User';
+import { assignRolesToUsers, fromListsJSON } from '../index';
 
 const defaultDate = new Date('2018-07-27T04:44:00.000Z');
 
@@ -9,9 +11,9 @@ const defaultUsers = () => [
     'アリス',
     2,
     new Stats({
-      女子トイレ: 50,
-      掃除機: 20,
-      ゴミ捨て: 30
+      '5b516711d804bab6fd6e80d7': 50, // 女子トイレ
+      '5b5167133013db7d86329ec8': 20, // 掃除機
+      '5b51671dbc6c6a7d5bcec539': 30 // ゴミ捨て
     }),
     defaultDate
   ),
@@ -20,9 +22,9 @@ const defaultUsers = () => [
     'ボブ',
     1,
     new Stats({
-      男子トイレ: 20,
-      掃除機: 30,
-      ゴミ捨て: 50
+      '5b51670ec35c9188eedd0e20': 20, // 男子トイレ
+      '5b5167133013db7d86329ec8': 30, // 掃除機
+      '5b51671dbc6c6a7d5bcec539': 50 // ゴミ捨て
     }),
     defaultDate
   ),
@@ -31,9 +33,9 @@ const defaultUsers = () => [
     'キャロル',
     2,
     new Stats({
-      女子トイレ: 2,
-      掃除機: 3,
-      ゴミ捨て: 5
+      '5b516711d804bab6fd6e80d7': 2, // 女子トイレ
+      '5b5167133013db7d86329ec8': 3, // 掃除機
+      '5b51671dbc6c6a7d5bcec539': 5 // ゴミ捨て
     }),
     defaultDate
   ),
@@ -42,9 +44,9 @@ const defaultUsers = () => [
     'デイブ',
     1,
     new Stats({
-      男子トイレ: 5,
-      掃除機: 3,
-      ゴミ捨て: 2
+      '5b51670ec35c9188eedd0e20': 5, // 男子トイレ
+      '5b5167133013db7d86329ec8': 3, // 掃除機
+      '5b51671dbc6c6a7d5bcec539': 2 // ゴミ捨て
     }),
     defaultDate
   )
@@ -59,14 +61,14 @@ const defaultRoles = () => [
 
 test('fromListsJSON', () => {
   const json = require('./fixtures/lists.json');
-  const [users, roles] = Models.fromListsJSON(json);
+  const [users, roles] = fromListsJSON(json);
 
   expect(users).toEqual(defaultUsers());
   expect(roles).toEqual(defaultRoles());
 });
 
 test('assignRolesToUsers', () => {
-  const assignments = Models.assignRolesToUsers(defaultUsers(), defaultRoles());
+  const assignments = assignRolesToUsers(defaultUsers(), defaultRoles());
   const json = assignments.toJSON();
 
   expect(json).toEqual([
