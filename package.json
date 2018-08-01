@@ -2,22 +2,41 @@
   "name": "hawaku-trello",
   "version": "0.1.0",
   "author": "Yuichi Tanikawa <kojole.jp@gmail.com>",
-  "keywords": [],
+  "devDependencies": {
+    "@google/clasp": "^1.5.0",
+    "@types/google-apps-script": "0.0.26",
+    "@types/jest": "^23.3.1",
+    "@types/node": "^10.5.5",
+    "jest": "^23.4.2",
+    "ts-jest": "^23.0.1",
+    "ts-loader": "^4.4.2",
+    "typescript": "^3.0.1",
+    "webpack": "^4.16.3",
+    "webpack-cli": "^3.1.0"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testEnvironment": "node",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
   "license": "MIT",
   "main": "index.js",
   "private": true,
   "scripts": {
     "build": "webpack",
     "test": "jest"
-  },
-  "devDependencies": {
-    "@google/clasp": "^1.5.0",
-    "@types/google-apps-script": "0.0.26",
-    "jest": "^23.4.1",
-    "webpack": "^4.16.1",
-    "webpack-cli": "^3.1.0"
-  },
-  "dependencies": {
-    "typescript": "^2.9.2"
   }
 }

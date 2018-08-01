@@ -1,16 +1,17 @@
-const Models = require('./models');
-const config = require('./config');
+import config from './config';
+import { assignRolesToUsers, fromListsJSON } from './models';
+import { CardJSON, ListJSON } from './models/trello';
 
-const Trello = window.Trello;
-const Promise = window.TrelloPowerUp.Promise;
+const Trello = (<any>window).Trello;
+const Promise = (<any>window).TrelloPowerUp.Promise;
 
 const WHITE_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
 const BLACK_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-black.svg';
 
-function authorize() {
-  return new Promise((resolve, reject) => {
+function authorize(): PromiseLike<any> {
+  return new Promise((resolve: any, reject: any) => {
     Trello.authorize({
       type: 'popup',
       name: 'hawaku-trello',
@@ -27,11 +28,11 @@ function authorize() {
   });
 }
 
-function doAssign(t, opts) {
+function doAssign(t: any, _opts: any) {
   return authorize()
     .then(() => t.lists('all'))
-    .then(lists => {
-      const [users, roles] = Models.fromListsJSON(lists);
+    .then((lists: ListJSON[]) => {
+      const [users, roles] = fromListsJSON(lists);
       if (users.length === 0) {
         console.log('No users');
         return;
@@ -40,7 +41,7 @@ function doAssign(t, opts) {
         console.log('No roles');
         return;
       }
-      const assignments = Models.assignRolesToUsers(users, roles);
+      const assignments = assignRolesToUsers(users, roles);
 
       const idList = config.idResultsList;
       const name = new Intl.DateTimeFormat('ja-JP', {
@@ -54,11 +55,11 @@ function doAssign(t, opts) {
       }).format(new Date());
       const desc = '```json\n' + JSON.stringify(assignments, null, 2) + '\n```';
 
-      return new Promise((resolve, reject) =>
+      return new Promise((resolve: any, reject: any) =>
         Trello.post(
           'cards',
           { idList, name, desc, pos: 'top' },
-          card => {
+          (card: CardJSON) => {
             console.log('POST success:', card.id);
             // Wait for the newly created card to appear
             setTimeout(() => {
@@ -72,8 +73,8 @@ function doAssign(t, opts) {
     });
 }
 
-window.TrelloPowerUp.initialize({
-  'board-buttons': function(t, opts) {
+(<any>window).TrelloPowerUp.initialize({
+  'board-buttons': function(_t: any, _opts: any) {
     return [
       {
         icon: {

@@ -1,8 +1,8 @@
-function randomInt(min, max) {
+function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function shuffle(array) {
+export function shuffle(array: any[]) {
   for (let i = 0; i < array.length - 1; i++) {
     const j = randomInt(i, array.length);
     if (i !== j) {
@@ -10,7 +10,3 @@ function shuffle(array) {
     }
   }
 }
-
-module.exports = {
-  shuffle
-};
