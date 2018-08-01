@@ -1,22 +1,18 @@
 import 'core-js/fn/array/find';
 import 'core-js/fn/array/includes';
 
-import { CardJSON, ListJSON } from '../models/trello';
+import { ListJSON } from '../models/trello';
 import User from '../models/User';
 import config from '../config';
 import Result from './Result';
 import TrelloClient from './TrelloClient';
-
-declare var global: any;
-global.archiveOldResults = archiveOldResults;
-global.updateUserStatsFromResults = updateUserStatsFromResults;
 
 interface Properties {
   trelloKey: string;
   trelloToken: string;
 }
 
-function archiveOldResults() {
+export function archiveOldResults() {
   const trello = _newClient();
   const cards = trello.getCards(config.idResultsList);
 
@@ -32,7 +28,7 @@ function archiveOldResults() {
   }
 }
 
-function updateUserStatsFromResults() {
+export function updateUserStatsFromResults() {
   const trello = _newClient();
   const lists = trello.getLists(config.idBorad);
 
@@ -81,9 +77,8 @@ function _newClient(): TrelloClient {
 
 function _getUsersFromLists(lists: ListJSON[]): { [id: string]: User } {
   const users: { [id: string]: User } = {};
-  const usersLists = lists.filter(
-    list =>
-      list.id === config.idUsersLists[0] || list.id === config.idUsersLists[1]
+  const usersLists = lists.filter(list =>
+    config.idUsersLists.includes(list.id)
   );
   for (const list of usersLists) {
     for (const card of list.cards) {

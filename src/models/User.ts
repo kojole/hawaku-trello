@@ -41,12 +41,12 @@ export default class User {
   }
 
   static metaFromDesc(desc: string): Meta {
-    const descJSON = parseDesc(desc);
+    const descJSON: { stats?: any; updatedAt?: any } = parseDesc(desc) || {};
     const meta: Meta = { stats: new Stats({}) };
-    if (descJSON.hasOwnProperty('stats')) {
+    if (descJSON.stats) {
       meta.stats = new Stats((<MetaJSON>descJSON).stats);
     }
-    if (descJSON.hasOwnProperty('updatedAt')) {
+    if (descJSON.updatedAt) {
       meta.updatedAt = new Date((<MetaJSON>descJSON).updatedAt);
     }
     return meta;

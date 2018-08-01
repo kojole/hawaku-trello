@@ -1,14 +1,13 @@
-const GasPlugin = require('gas-webpack-plugin');
-
 const base = {
-  mode: 'development',
+  mode: 'production',
   resolve: {
     extensions: ['.ts', '.js']
   }
 };
 
 module.exports = [
-  Object.assign(base, {
+  {
+    ...base,
     entry: './src/frontend/index.ts',
     output: {
       filename: 'bundle.js',
@@ -22,12 +21,15 @@ module.exports = [
         }
       ]
     }
-  }),
-  Object.assign(base, {
+  },
+  {
+    ...base,
     entry: './src/functions/index.ts',
     output: {
       filename: 'bundle.js',
-      path: __dirname + '/dist'
+      path: __dirname + '/dist',
+      library: 'Hawaku',
+      libraryTarget: 'this'
     },
     module: {
       rules: [
@@ -43,8 +45,6 @@ module.exports = [
           ]
         }
       ]
-    },
-    devtool: false,
-    plugins: [new GasPlugin()]
-  })
+    }
+  }
 ];
