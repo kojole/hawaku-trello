@@ -1,3 +1,5 @@
+import { CardJSON, parseDesc } from '../models/trello';
+
 interface Assignment {
   user: string;
   role: string;
@@ -5,7 +7,7 @@ interface Assignment {
   roleId: string;
 }
 
-class Result {
+export default class Result {
   constructor(public assignments: Assignment[], public createdAt: Date) {}
 
   static fromJSON(card: CardJSON): Result {

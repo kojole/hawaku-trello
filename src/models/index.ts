@@ -1,3 +1,4 @@
+import { assignment, assignmentFrom } from './assignment';
 import Role from './Role';
 import { ListJSON } from './trello';
 import User from './User';
@@ -13,37 +14,14 @@ export function fromListsJSON(lists: ListJSON[]): [User[], Role[]] {
   ];
 }
 
-type Assignments = Array<{
-  user: { name: string; id: string | null };
-  role: { name: string; id: string };
-}> & {
-  toJSON(): any;
-};
-
-export function assignRolesToUsers(users: User[], roles: Role[]): Assignments {
-  const assignments: Assignments = Object.assign([], {
-    // To refer itself by `this`, avoid an arrow function syntax
-    toJSON: function(): any {
-      return (<Assignments>this).map(({ user, role }) => ({
-        user: user.name,
-        role: role.name,
-        userId: user.id,
-        roleId: role.id
-      }));
-    }
-  });
+export function assignRolesToUsers(users: User[], roles: Role[]): assignment[] {
+  const assignments: assignment[] = [];
 
   shuffle(users);
 
   for (const role of roles) {
     if (users.length === 0) {
-      assignments.push({
-        user: {
-          name: 'なし',
-          id: null
-        },
-        role
-      });
+      assignments.push(assignmentFrom(null, role));
       continue;
     }
 
@@ -56,10 +34,7 @@ export function assignRolesToUsers(users: User[], roles: Role[]): Assignments {
         );
 
         const user = sUsers[0];
-        assignments.push({
-          user,
-          role
-        });
+        assignments.push(assignmentFrom(user, role));
         users = users.filter(u => u.id !== user.id);
         continue;
       }
@@ -69,17 +44,11 @@ export function assignRolesToUsers(users: User[], roles: Role[]): Assignments {
       (a, b) =>
         a.stats.normalizedCount(role.id) - b.stats.normalizedCount(role.id)
     );
-    assignments.push({
-      user: users.shift() as User,
-      role
-    });
+    assignments.push(assignmentFrom(users.shift() as User, role));
   }
 
   for (const user of users) {
-    assignments.push({
-      user,
-      role: Role.none()
-    });
+    assignments.push(assignmentFrom(user, null));
   }
 
   return assignments;

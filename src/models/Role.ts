@@ -7,9 +7,4 @@ export default class Role {
   static fromJSON(card: CardJSON): Role {
     return new Role(card.id, card.name, sexFromJSON(card));
   }
-
-  static none(): Role {
-    // Use `NULL` string for ID
-    return new Role('NULL', 'なし');
-  }
 }

@@ -13,6 +13,8 @@ interface Meta {
 }
 
 export default class User {
+  dirty = false;
+
   constructor(
     public id: string,
     public name: string,
@@ -20,6 +22,17 @@ export default class User {
     public stats: Stats,
     public updatedAt?: Date
   ) {}
+
+  newDesc(): string {
+    const meta = { stats: this.stats, updatedAt: this.updatedAt };
+    return '```json\n' + JSON.stringify(meta, null, 2) + '\n```';
+  }
+
+  wasAssignedTo(id: string, date: Date) {
+    this.stats.increment(id);
+    this.updatedAt = date;
+    this.dirty = true;
+  }
 
   static fromJSON(card: CardJSON): User {
     const sex = sexFromJSON(card);

@@ -1,6 +1,6 @@
-import config from './config';
-import { assignRolesToUsers, fromListsJSON } from './models';
-import { CardJSON, ListJSON } from './models/trello';
+import config from '../config';
+import { assignRolesToUsers, fromListsJSON } from '../models/index';
+import { CardJSON, ListJSON } from '../models/trello';
 
 const Trello = (<any>window).Trello;
 const Promise = (<any>window).TrelloPowerUp.Promise;

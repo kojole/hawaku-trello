@@ -1,15 +1,23 @@
+import 'core-js/fn/array/find';
+import 'core-js/fn/array/includes';
+
+import { CardJSON, ListJSON } from '../models/trello';
+import User from '../models/User';
+import config from '../config';
+import Result from './Result';
+import TrelloClient from './TrelloClient';
+
+declare var global: any;
+global.archiveOldResults = archiveOldResults;
+global.updateUserStatsFromResults = updateUserStatsFromResults;
+
 interface Properties {
   trelloKey: string;
   trelloToken: string;
 }
 
-interface UserJSON {
-  name: string;
-  sex: number;
-}
-
 function archiveOldResults() {
-  const trello = _newTrello();
+  const trello = _newClient();
   const cards = trello.getCards(config.idResultsList);
 
   // Archive 1-week old cards
@@ -24,30 +32,16 @@ function archiveOldResults() {
   }
 }
 
-function createUsers(users: UserJSON[]) {
-  const trello = _newTrello();
-  for (const user of users) {
-    let idLabels = '';
-    if (user.sex === 1) {
-      idLabels = config.idMaleLabel;
-    } else if (user.sex === 2) {
-      idLabels = config.idFemaleLabel;
-    }
-
-    trello.postCard({
-      name: user.name,
-      idList: config.idUsersLists[0],
-      idLabels
-    });
-  }
-}
-
 function updateUserStatsFromResults() {
-  const trello = _newTrello();
+  const trello = _newClient();
   const lists = trello.getLists(config.idBorad);
 
-  // Can't use Array.find
-  const resultsList = lists.filter(list => list.id === config.idResultsList)[0];
+  const resultsList = lists.find(list => list.id === config.idResultsList);
+  if (!resultsList) {
+    console.error(`list ${config.idResultsList} not found`);
+    return;
+  }
+
   const results = resultsList.cards.map(Result.fromJSON);
   results.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
@@ -55,6 +49,9 @@ function updateUserStatsFromResults() {
 
   for (const result of results) {
     for (const assignment of result.assignments) {
+      if (!assignment.userId) {
+        continue;
+      }
       const user = users[assignment.userId];
       if (!user) {
         continue;
@@ -74,16 +71,16 @@ function updateUserStatsFromResults() {
   }
 }
 
-function _newTrello(): Trello {
+function _newClient(): TrelloClient {
   const {
     trelloKey,
     trelloToken
   } = PropertiesService.getScriptProperties().getProperties() as Properties;
-  return new Trello(trelloKey, trelloToken);
+  return new TrelloClient(trelloKey, trelloToken);
 }
 
 function _getUsersFromLists(lists: ListJSON[]): { [id: string]: User } {
-  const users = {};
+  const users: { [id: string]: User } = {};
   const usersLists = lists.filter(
     list =>
       list.id === config.idUsersLists[0] || list.id === config.idUsersLists[1]

@@ -1,21 +1,10 @@
+import { CardJSON, ListJSON } from '../models/trello';
+
 interface Params {
   [key: string]: string;
 }
 
-interface ListJSON {
-  id: string;
-  name: string;
-  cards: CardJSON[];
-}
-
-interface CardJSON {
-  id: string;
-  name: string;
-  desc: string;
-  idLabels: string[];
-}
-
-class Trello {
+export default class TrelloClient {
   private endpoint = 'https://api.trello.com/1/';
   private credentials: { key: string; token: string };
 
