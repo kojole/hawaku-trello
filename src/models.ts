@@ -1,5 +1,5 @@
-const config = require('./config');
-const { shuffle } = require('./random');
+import config from './config';
+import { shuffle } from './random';
 
 function sexFromLabelsJSON(labels) {
   const ids = labels.map(label => label.id);
