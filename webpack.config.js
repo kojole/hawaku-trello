@@ -1,5 +1,5 @@
 const base = {
-  mode: 'production',
+  mode: 'development',
   resolve: {
     extensions: ['.ts', '.js']
   }

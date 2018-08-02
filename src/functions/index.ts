@@ -1,5 +1,6 @@
 import 'core-js/fn/array/find';
 import 'core-js/fn/array/includes';
+import 'core-js/fn/object/values';
 
 import { ListJSON } from '../models/trello';
 import User from '../models/User';
