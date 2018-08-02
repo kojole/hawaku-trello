@@ -69,9 +69,8 @@ test('fromListsJSON', () => {
 
 test('assignRolesToUsers', () => {
   const assignments = assignRolesToUsers(defaultUsers(), defaultRoles());
-  const json = assignments.toJSON();
 
-  expect(json).toEqual([
+  expect(assignments).toEqual([
     {
       user: 'ボブ',
       role: '男子トイレ',

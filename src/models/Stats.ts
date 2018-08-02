@@ -13,6 +13,14 @@ export default class Stats {
     return this.counts[id] || 0;
   }
 
+  increment(id: string) {
+    if (this.counts[id]) {
+      this.counts[id] += 1;
+    } else {
+      this.counts[id] = 1;
+    }
+  }
+
   normalizedCount(id: string): number {
     if (this.total === 0) {
       return 0;

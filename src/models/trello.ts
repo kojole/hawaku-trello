@@ -27,5 +27,5 @@ export function parseDesc(desc: string): any {
       console.error(e);
     }
   }
-  return {};
+  return null;
 }
