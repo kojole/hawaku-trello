@@ -27,4 +27,8 @@ export default class Stats {
     }
     return this.count(id) / this.total;
   }
+
+  toJSON(): Counts {
+    return this.counts;
+  }
 }
