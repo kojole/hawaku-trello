@@ -84,6 +84,7 @@ function doAssign(t: any) {
 
 function addAssignment(t: any) {
   return t.card('id', 'desc', 'idList').then((card: CardJSON) => {
+    console.log(card.id);
     if (card.idList !== config.idResultsList) {
       console.log('Not a result card');
       return;
@@ -94,9 +95,11 @@ function addAssignment(t: any) {
       // Parse error
       assignments = [];
     }
+    console.log(assignments);
 
     return t.lists((lists: ListJSON[]) => {
       const [users, roles] = fromListsJSONAll(lists);
+      console.log(users, roles);
 
       return t.popup({
         title: '当番を追加する',
