@@ -30,3 +30,7 @@ export function parseDesc(desc: string): any {
   }
   return null;
 }
+
+export function toDesc(object: any): string {
+  return '```json\n' + JSON.stringify(object, null, 2) + '\n```';
+}

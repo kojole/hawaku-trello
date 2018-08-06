@@ -1,7 +1,9 @@
+import * as Bluebird from 'bluebird';
+
 import config from '@/config';
 import { assignment } from '../models/assignment';
 import { assignRolesToUsers, fromListsJSON } from '../models/index';
-import { CardJSON, ListJSON, parseDesc } from '../models/trello';
+import { CardJSON, ListJSON, parseDesc, toDesc } from '../models/trello';
 
 const Trello = (<any>window).Trello;
 const Promise = (<any>window).TrelloPowerUp.Promise;
@@ -13,7 +15,7 @@ const BLACK_ICON =
 const GRAY_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-gray.svg';
 
-function authorize(): PromiseLike<any> {
+function authorize(): Bluebird<any> {
   return new Promise((resolve: any, reject: any) => {
     Trello.authorize({
       type: 'popup',
@@ -56,7 +58,7 @@ function doAssign(t: any, _opts: any) {
         minute: 'numeric',
         second: 'numeric'
       }).format(new Date());
-      const desc = '```json\n' + JSON.stringify(assignments, null, 2) + '\n```';
+      const desc = toDesc(assignments);
 
       return new Promise((resolve: any, reject: any) =>
         Trello.post(
@@ -78,8 +80,8 @@ function doAssign(t: any, _opts: any) {
 
 function addAssignment(_t: any, _opts: any) {}
 
-function deleteAssignment(t: any, _opts: any) {
-  return t.card('idList', 'desc').then((card: CardJSON) => {
+function deleteAssignment(t: any) {
+  return t.card('id', 'desc', 'idList').then((card: CardJSON) => {
     console.log(card);
     if (card.idList !== config.idResultsList) {
       console.log('Not a result card');
@@ -97,8 +99,17 @@ function deleteAssignment(t: any, _opts: any) {
       items: assignments.map((assignment, index) => ({
         text: `${assignment.user} - ${assignment.role}`,
         callback: (t: any) => {
-          console.log('Delete:', index);
-          return t.closePopup();
+          assignments.splice(index, 1);
+          const desc = toDesc(assignments);
+
+          return authorize()
+            .then(
+              () =>
+                new Promise((resolve: any, reject: any) =>
+                  Trello.put(`cards/${card.id}`, { desc }, resolve, reject)
+                )
+            )
+            .finally(t.closePopup);
         }
       }))
     });
