@@ -1,0 +1,6 @@
+[build]
+  publish = "public/"
+  command = "npm run build -- -p"
+
+[context.development]
+  command = "npm run build -- --env.development"
