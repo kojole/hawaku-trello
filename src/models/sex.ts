@@ -1,5 +1,5 @@
+import config from '@/config';
 import { CardJSON } from './trello';
-import config from '../config';
 
 export type sex = 0 | 1 | 2;
 

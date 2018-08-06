@@ -5,6 +5,11 @@
     "module": "es2015",
     "lib": ["es2017", "dom"],
 
+    "baseUrl": "./src",
+    "paths": {
+      "@/config": ["config"]
+    },
+
     /* Strict Type-Checking Options */
     "strict": true /* Enable all strict type-checking options. */,
 

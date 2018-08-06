@@ -1,4 +1,4 @@
-import config from '../config';
+import config from '@/config';
 import { assignRolesToUsers, fromListsJSON } from '../models/index';
 import { CardJSON, ListJSON } from '../models/trello';
 

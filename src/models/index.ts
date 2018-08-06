@@ -1,8 +1,8 @@
+import config from '@/config';
 import { assignment, assignmentFrom } from './assignment';
 import Role from './Role';
 import { ListJSON } from './trello';
 import User from './User';
-import config from '../config';
 import { shuffle } from '../random';
 
 export function fromListsJSON(lists: ListJSON[]): [User[], Role[]] {

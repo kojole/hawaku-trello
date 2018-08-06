@@ -1,13 +1,23 @@
-const base = {
-  mode: 'development',
-  resolve: {
-    extensions: ['.ts', '.js']
-  }
+const path = require('path');
+
+const config = params => env => {
+  const configFile =
+    'src/config' + (env && env.development ? '.development' : '');
+
+  return {
+    ...params,
+    mode: 'development',
+    resolve: {
+      extensions: ['.ts', '.js'],
+      alias: {
+        '@/config$': path.resolve(__dirname, configFile)
+      }
+    }
+  };
 };
 
 module.exports = [
-  {
-    ...base,
+  config({
     entry: './src/frontend/index.ts',
     output: {
       filename: 'bundle.js',
@@ -21,9 +31,8 @@ module.exports = [
         }
       ]
     }
-  },
-  {
-    ...base,
+  }),
+  config({
     entry: './src/functions/index.ts',
     output: {
       filename: 'bundle.js',
@@ -46,5 +55,5 @@ module.exports = [
         }
       ]
     }
-  }
+  })
 ];

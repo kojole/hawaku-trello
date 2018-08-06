@@ -2,9 +2,9 @@ import 'core-js/fn/array/find';
 import 'core-js/fn/array/includes';
 import 'core-js/fn/object/values';
 
+import config from '@/config';
 import { ListJSON } from '../models/trello';
 import User from '../models/User';
-import config from '../config';
 import Result from './Result';
 import TrelloClient from './TrelloClient';
 
