@@ -1,3 +1,4 @@
+import * as Bluebird from 'bluebird';
 import { app, h } from 'hyperapp';
 
 import { assignment, assignmentFrom } from '../models/assignment';
@@ -9,6 +10,24 @@ declare const Trello: any;
 declare const TrelloPowerUp: any;
 const Promise = TrelloPowerUp.Promise;
 const t = TrelloPowerUp.iframe();
+
+function authorize(): Bluebird<any> {
+  return new Promise((resolve: any, reject: any) => {
+    Trello.authorize({
+      type: 'popup',
+      name: 'hawaku-trello',
+      scope: {
+        write: true
+      },
+      expiration: 'never',
+      success: resolve,
+      error: () => {
+        console.log('Authentication failed');
+        reject();
+      }
+    });
+  });
+}
 
 const id: string = t.arg('id');
 const users: User[] = t.arg('users');
@@ -98,21 +117,22 @@ const view = (state: State, actions: Actions) =>
             )
           );
           const desc = toDesc(assignments);
-          console.log('aushorized: ', Trello.authorized());
-          new Promise((resolve: any, reject: any) =>
-            Trello.put(
-              `cards/${id}`,
-              { desc },
-              (card: CardJSON) => {
-                console.log('PUT success:', card.id);
-                resolve();
-              },
-              (e: any) => {
-                console.error(e);
-                reject();
-              }
-            )
-          ).finally(() => t.closePopup());
+          authorize().then(() =>
+            new Promise((resolve: any, reject: any) =>
+              Trello.put(
+                `cards/${id}`,
+                { desc },
+                (card: CardJSON) => {
+                  console.log('PUT success:', card.id);
+                  resolve();
+                },
+                (e: any) => {
+                  console.error(e);
+                  reject();
+                }
+              )
+            ).finally(() => t.closePopup())
+          );
         }
       },
       '追加'
