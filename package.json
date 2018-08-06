@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "author": "Yuichi Tanikawa <kojole.jp@gmail.com>",
   "dependencies": {
-    "core-js": "^2.5.7"
+    "core-js": "^2.5.7",
+    "hyperapp": "^1.2.8"
   },
   "devDependencies": {
     "@google/clasp": "^1.5.0",

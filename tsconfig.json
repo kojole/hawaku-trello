@@ -5,6 +5,7 @@
     "module": "es2015",
     "lib": ["es2017", "dom"],
 
+    "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {
       "@/config": ["config"]
