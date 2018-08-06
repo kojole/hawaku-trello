@@ -109,7 +109,7 @@ function deleteAssignment(t: any) {
                   Trello.put(`cards/${card.id}`, { desc }, resolve, reject)
                 )
             )
-            .finally(t.closePopup);
+            .finally(() => t.closePopup());
         }
       }))
     });
