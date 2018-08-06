@@ -9,8 +9,9 @@ import {
 } from '../models/index';
 import { CardJSON, ListJSON, parseDesc, toDesc } from '../models/trello';
 
-const Trello = (<any>window).Trello;
-const Promise = (<any>window).TrelloPowerUp.Promise;
+declare const Trello: any;
+declare const TrelloPowerUp: any;
+const Promise = TrelloPowerUp.Promise;
 
 const WHITE_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
@@ -169,7 +170,7 @@ function deleteAssignment(t: any) {
   });
 }
 
-(<any>window).TrelloPowerUp.initialize({
+TrelloPowerUp.initialize({
   'board-buttons': (_t: any) => [
     {
       icon: {

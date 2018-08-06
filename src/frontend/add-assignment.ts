@@ -132,10 +132,7 @@ const view = (state: State, actions: Actions) =>
                     console.log('PUT success:', card.id);
                     resolve();
                   },
-                  (e: any) => {
-                    console.error(e);
-                    reject();
-                  }
+                  reject
                 )
               ).finally(() => t.closePopup())
             );
