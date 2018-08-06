@@ -82,7 +82,6 @@ function addAssignment(_t: any, _opts: any) {}
 
 function deleteAssignment(t: any) {
   return t.card('id', 'desc', 'idList').then((card: CardJSON) => {
-    console.log(card);
     if (card.idList !== config.idResultsList) {
       console.log('Not a result card');
       return;
@@ -106,7 +105,15 @@ function deleteAssignment(t: any) {
             .then(
               () =>
                 new Promise((resolve: any, reject: any) =>
-                  Trello.put(`cards/${card.id}`, { desc }, resolve, reject)
+                  Trello.put(
+                    `cards/${card.id}`,
+                    { desc },
+                    (card: CardJSON) => {
+                      console.log('PUT success:', card.id);
+                      resolve();
+                    },
+                    reject
+                  )
                 )
             )
             .finally(() => t.closePopup());
