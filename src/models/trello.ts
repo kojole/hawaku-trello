@@ -4,6 +4,7 @@ export interface CardJSON {
   desc: string;
   labels: LabelJSON[];
   idLabels?: string[];
+  idList?: string;
 }
 
 export interface LabelJSON {
@@ -28,4 +29,8 @@ export function parseDesc(desc: string): any {
     }
   }
   return null;
+}
+
+export function toDesc(object: any): string {
+  return '```json\n' + JSON.stringify(object, null, 2) + '\n```';
 }

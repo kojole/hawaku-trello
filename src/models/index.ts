@@ -14,6 +14,24 @@ export function fromListsJSON(lists: ListJSON[]): [User[], Role[]] {
   ];
 }
 
+export function fromListsJSONAll(lists: ListJSON[]): [User[], Role[]] {
+  const usersLists = lists.filter(list =>
+    config.idUsersLists.includes(list.id)
+  );
+  const rolesLists = lists.filter(list =>
+    config.idRolesLists.includes(list.id)
+  );
+
+  return [
+    ([] as User[]).concat(
+      ...usersLists.map(list => list.cards.map(User.fromJSON))
+    ),
+    ([] as Role[]).concat(
+      ...rolesLists.map(list => list.cards.map(Role.fromJSON))
+    )
+  ];
+}
+
 export function assignRolesToUsers(users: User[], roles: Role[]): assignment[] {
   const assignments: assignment[] = [];
 

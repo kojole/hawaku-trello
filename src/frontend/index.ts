@@ -1,16 +1,26 @@
-import config from '@/config';
-import { assignRolesToUsers, fromListsJSON } from '../models/index';
-import { CardJSON, ListJSON } from '../models/trello';
+import * as Bluebird from 'bluebird';
 
-const Trello = (<any>window).Trello;
-const Promise = (<any>window).TrelloPowerUp.Promise;
+import config from '@/config';
+import { assignment } from '../models/assignment';
+import {
+  assignRolesToUsers,
+  fromListsJSON,
+  fromListsJSONAll
+} from '../models/index';
+import { CardJSON, ListJSON, parseDesc, toDesc } from '../models/trello';
+
+declare const Trello: any;
+declare const TrelloPowerUp: any;
+const Promise = TrelloPowerUp.Promise;
 
 const WHITE_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
 const BLACK_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-black.svg';
+const GRAY_ICON =
+  'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-gray.svg';
 
-function authorize(): PromiseLike<any> {
+function authorize(): Bluebird<any> {
   return new Promise((resolve: any, reject: any) => {
     Trello.authorize({
       type: 'popup',
@@ -28,7 +38,7 @@ function authorize(): PromiseLike<any> {
   });
 }
 
-function doAssign(t: any, _opts: any) {
+function doAssign(t: any) {
   return authorize()
     .then(() => t.lists('all'))
     .then((lists: ListJSON[]) => {
@@ -53,7 +63,7 @@ function doAssign(t: any, _opts: any) {
         minute: 'numeric',
         second: 'numeric'
       }).format(new Date());
-      const desc = '```json\n' + JSON.stringify(assignments, null, 2) + '\n```';
+      const desc = toDesc(assignments);
 
       return new Promise((resolve: any, reject: any) =>
         Trello.post(
@@ -73,18 +83,116 @@ function doAssign(t: any, _opts: any) {
     });
 }
 
-(<any>window).TrelloPowerUp.initialize({
-  'board-buttons': function(_t: any, _opts: any) {
-    return [
-      {
-        icon: {
-          dark: WHITE_ICON,
-          light: BLACK_ICON
-        },
-        text: '当番を決める！',
-        callback: doAssign,
-        condition: 'edit'
-      }
-    ];
-  }
+function addAssignment(t: any) {
+  return t.card('id', 'desc', 'idList').then((card: CardJSON) => {
+    if (card.idList !== config.idResultsList) {
+      console.log('Not a result card');
+      return;
+    }
+
+    let assignments: assignment[] = parseDesc(card.desc) || [];
+    if (!Array.isArray(assignments)) {
+      // Parse error
+      assignments = [];
+    }
+
+    return authorize()
+      .then(() => t.lists('all'))
+      .then((lists: ListJSON[]) => {
+        let [users, roles] = fromListsJSONAll(lists);
+
+        users = users.filter(
+          user => !assignments.find(assignment => assignment.userId === user.id)
+        );
+        roles = roles.filter(
+          role => !assignments.find(assignment => assignment.roleId === role.id)
+        );
+
+        if (users.length === 0) {
+          console.log('No extra users');
+          return;
+        }
+        if (roles.length === 0) {
+          console.log('No extra roles');
+          return;
+        }
+
+        return t.popup({
+          title: '当番を追加する',
+          url: './add-assignment.html',
+          args: { id: card.id, users, roles, assignments }
+        });
+      });
+  });
+}
+
+function deleteAssignment(t: any) {
+  return t.card('id', 'desc', 'idList').then((card: CardJSON) => {
+    if (card.idList !== config.idResultsList) {
+      console.log('Not a result card');
+      return;
+    }
+
+    const assignments: assignment[] = parseDesc(card.desc) || [];
+    if (!Array.isArray(assignments) || assignments.length === 0) {
+      console.log('No assignments');
+      return;
+    }
+
+    return t.popup({
+      title: '当番を削除する',
+      items: assignments.map((assignment, index) => ({
+        text: `${assignment.user} - ${assignment.role}`,
+        callback: (t: any) => {
+          assignments.splice(index, 1);
+          const desc = toDesc(assignments);
+
+          return authorize()
+            .then(
+              () =>
+                new Promise((resolve: any, reject: any) =>
+                  Trello.put(
+                    `cards/${card.id}`,
+                    { desc },
+                    (card: CardJSON) => {
+                      console.log('PUT success:', card.id);
+                      resolve();
+                    },
+                    reject
+                  )
+                )
+            )
+            .finally(() => t.closePopup());
+        }
+      }))
+    });
+  });
+}
+
+TrelloPowerUp.initialize({
+  'board-buttons': (_t: any) => [
+    {
+      icon: {
+        dark: WHITE_ICON,
+        light: BLACK_ICON
+      },
+      text: '当番を決める！',
+      callback: doAssign,
+      condition: 'edit'
+    }
+  ],
+  'card-buttons': (_t: any) => [
+    {
+      icon: GRAY_ICON,
+      text: '当番を追加する',
+      callback: addAssignment,
+      condition: 'edit'
+    },
+    {
+      icon: GRAY_ICON,
+      text: '当番を削除する',
+      callback: deleteAssignment,
+      condition: 'edit'
+    }
+  ]
 });
