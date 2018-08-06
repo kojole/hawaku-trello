@@ -33,7 +33,7 @@ function authorize(): Bluebird<any> {
   });
 }
 
-function doAssign(t: any, _opts: any) {
+function doAssign(t: any) {
   return authorize()
     .then(() => t.lists('all'))
     .then((lists: ListJSON[]) => {
@@ -78,7 +78,11 @@ function doAssign(t: any, _opts: any) {
     });
 }
 
-function addAssignment(_t: any, _opts: any) {}
+function addAssignment(t: any) {
+  return t.lists('all').then((lists: any) => {
+    console.log(lists);
+  });
+}
 
 function deleteAssignment(t: any) {
   return t.card('id', 'desc', 'idList').then((card: CardJSON) => {
@@ -124,7 +128,7 @@ function deleteAssignment(t: any) {
 }
 
 (<any>window).TrelloPowerUp.initialize({
-  'board-buttons': (_t: any, _opts: any) => [
+  'board-buttons': (_t: any) => [
     {
       icon: {
         dark: WHITE_ICON,
@@ -135,7 +139,7 @@ function deleteAssignment(t: any) {
       condition: 'edit'
     }
   ],
-  'card-buttons': (_t: any, _opts: any) => [
+  'card-buttons': (_t: any) => [
     {
       icon: GRAY_ICON,
       text: '当番を追加する',
