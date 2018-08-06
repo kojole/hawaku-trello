@@ -97,7 +97,7 @@ function addAssignment(t: any) {
     }
     console.log(assignments);
 
-    return t.lists((lists: ListJSON[]) => {
+    return t.lists('all').then((lists: ListJSON[]) => {
       const [users, roles] = fromListsJSONAll(lists);
       console.log(users, roles);
 
