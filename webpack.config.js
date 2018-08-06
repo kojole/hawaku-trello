@@ -18,9 +18,12 @@ const config = params => env => {
 
 module.exports = [
   config({
-    entry: './src/frontend/index.ts',
+    entry: {
+      index: './src/frontend/index.ts',
+      'add-assignment': './src/frontend/add-assignment.ts'
+    },
     output: {
-      filename: 'bundle.js',
+      filename: '[name].js',
       path: __dirname + '/public'
     },
     module: {

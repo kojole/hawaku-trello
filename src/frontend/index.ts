@@ -2,7 +2,11 @@ import * as Bluebird from 'bluebird';
 
 import config from '@/config';
 import { assignment } from '../models/assignment';
-import { assignRolesToUsers, fromListsJSON } from '../models/index';
+import {
+  assignRolesToUsers,
+  fromListsJSON,
+  fromListsJSONAll
+} from '../models/index';
 import { CardJSON, ListJSON, parseDesc, toDesc } from '../models/trello';
 
 const Trello = (<any>window).Trello;
@@ -79,8 +83,28 @@ function doAssign(t: any) {
 }
 
 function addAssignment(t: any) {
-  return t.lists('all').then((lists: any) => {
-    console.log(lists);
+  return t.card('id', 'desc', 'idList').then((card: CardJSON) => {
+    if (card.idList !== config.idResultsList) {
+      console.log('Not a result card');
+      return;
+    }
+
+    let assignments: assignment[] = parseDesc(card.desc) || [];
+    if (!Array.isArray(assignments)) {
+      // Parse error
+      assignments = [];
+    }
+
+    return t.lists((lists: ListJSON[]) => {
+      const [users, roles] = fromListsJSONAll(lists);
+
+      return t.popup({
+        title: '当番を追加する',
+        url: './add-assignment.html',
+        args: { users, roles, assignments },
+        height: 278
+      });
+    });
   });
 }
 
