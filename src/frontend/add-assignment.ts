@@ -62,13 +62,13 @@ const view = (state: State, actions: Actions) =>
       oncreate: () => t.sizeTo('#app')
     },
     [
-      h('div', { className: 'list' }, [
-        h('h2', { className: 'list-title' }, '人'),
+      h('div', { class: 'list' }, [
+        h('h2', { class: 'list-title' }, '人'),
         ...users.map((user, i) =>
           h(
             'div',
             {
-              className: 'list-item',
+              class: 'list-item',
               onclick: () => actions.selectUser(i)
             },
             [
@@ -82,13 +82,13 @@ const view = (state: State, actions: Actions) =>
           )
         )
       ]),
-      h('div', { className: 'list' }, [
-        h('h2', { className: 'list-title' }, '仕事'),
+      h('div', { class: 'list' }, [
+        h('h2', { class: 'list-title' }, '仕事'),
         ...roles.map((role, i) =>
           h(
             'div',
             {
-              className: 'list-item',
+              class: 'list-item',
               onclick: () => actions.selectRole(i)
             },
             [
@@ -105,7 +105,7 @@ const view = (state: State, actions: Actions) =>
       h(
         'button',
         {
-          className: 'mod-primary',
+          class: 'list-submit mod-primary',
           disabled:
             state.selectedRoleIndex === null ||
             state.selectedUserIndex === null,
