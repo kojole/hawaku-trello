@@ -120,7 +120,7 @@ function addAssignment(t: any) {
           title: '当番を追加する',
           url: './add-assignment.html',
           args: { id: card.id, users, roles, assignments },
-          height: 300
+          height: 200
         });
       });
   });

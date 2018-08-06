@@ -56,89 +56,95 @@ const actions = {
 type Actions = typeof actions;
 
 const view = (state: State, actions: Actions) =>
-  h('div', {}, [
-    h('div', { className: 'list' }, [
-      h('h2', { className: 'list-title' }, '人'),
-      ...users.map((user, i) =>
-        h(
-          'div',
-          {
-            className: 'list-item',
-            onclick: () => actions.selectUser(i)
-          },
-          [
-            h('input', {
-              id: `user-${i}`,
-              type: 'radio',
-              checked: i === state.selectedUserIndex
-            }),
-            h('label', { for: `user-${i}` }, user.name)
-          ]
+  h(
+    'div',
+    {
+      oncreate: () => t.sizeTo('#app')
+    },
+    [
+      h('div', { className: 'list' }, [
+        h('h2', { className: 'list-title' }, '人'),
+        ...users.map((user, i) =>
+          h(
+            'div',
+            {
+              className: 'list-item',
+              onclick: () => actions.selectUser(i)
+            },
+            [
+              h('input', {
+                id: `user-${i}`,
+                type: 'radio',
+                checked: i === state.selectedUserIndex
+              }),
+              h('label', { for: `user-${i}` }, user.name)
+            ]
+          )
         )
-      )
-    ]),
-    h('div', { className: 'list' }, [
-      h('h2', { className: 'list-title' }, '仕事'),
-      ...roles.map((role, i) =>
-        h(
-          'div',
-          {
-            className: 'list-item',
-            onclick: () => actions.selectRole(i)
-          },
-          [
-            h('input', {
-              id: `role-${i}`,
-              type: 'radio',
-              checked: i === state.selectedRoleIndex
-            }),
-            h('label', { for: `role-${i}` }, role.name)
-          ]
+      ]),
+      h('div', { className: 'list' }, [
+        h('h2', { className: 'list-title' }, '仕事'),
+        ...roles.map((role, i) =>
+          h(
+            'div',
+            {
+              className: 'list-item',
+              onclick: () => actions.selectRole(i)
+            },
+            [
+              h('input', {
+                id: `role-${i}`,
+                type: 'radio',
+                checked: i === state.selectedRoleIndex
+              }),
+              h('label', { for: `role-${i}` }, role.name)
+            ]
+          )
         )
-      )
-    ]),
-    h(
-      'button',
-      {
-        className: 'mod-primary',
-        disabled:
-          state.selectedRoleIndex === null || state.selectedUserIndex === null,
-        onclick: () => {
-          if (
+      ]),
+      h(
+        'button',
+        {
+          className: 'mod-primary',
+          disabled:
             state.selectedRoleIndex === null ||
-            state.selectedUserIndex === null
-          ) {
-            return;
-          }
-          assignments.push(
-            assignmentFrom(
-              users[state.selectedUserIndex] as User,
-              roles[state.selectedRoleIndex] as Role
-            )
-          );
-          const desc = toDesc(assignments);
-          authorize().then(() =>
-            new Promise((resolve: any, reject: any) =>
-              Trello.put(
-                `cards/${id}`,
-                { desc },
-                (card: CardJSON) => {
-                  console.log('PUT success:', card.id);
-                  resolve();
-                },
-                (e: any) => {
-                  console.error(e);
-                  reject();
-                }
+            state.selectedUserIndex === null,
+          onclick: () => {
+            if (
+              state.selectedRoleIndex === null ||
+              state.selectedUserIndex === null
+            ) {
+              return;
+            }
+            assignments.push(
+              assignmentFrom(
+                users[state.selectedUserIndex] as User,
+                roles[state.selectedRoleIndex] as Role
               )
-            ).finally(() => t.closePopup())
-          );
-        }
-      },
-      '追加'
-    )
-  ]);
+            );
+            const desc = toDesc(assignments);
+            authorize().then(() =>
+              new Promise((resolve: any, reject: any) =>
+                Trello.put(
+                  `cards/${id}`,
+                  { desc },
+                  (card: CardJSON) => {
+                    console.log('PUT success:', card.id);
+                    resolve();
+                  },
+                  (e: any) => {
+                    console.error(e);
+                    reject();
+                  }
+                )
+              ).finally(() => t.closePopup())
+            );
+          }
+        },
+        '追加'
+      )
+    ]
+  );
 
 const container = document.getElementById('app');
 app(state, actions, view, container);
-// TODO: adjust popup height
