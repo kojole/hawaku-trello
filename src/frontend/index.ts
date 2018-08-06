@@ -120,8 +120,7 @@ function addAssignment(t: any) {
         return t.popup({
           title: '当番を追加する',
           url: './add-assignment.html',
-          args: { id: card.id, users, roles, assignments },
-          height: 200
+          args: { id: card.id, users, roles, assignments }
         });
       });
   });
