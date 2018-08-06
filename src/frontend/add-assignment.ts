@@ -1,6 +1,6 @@
 import { app, h } from 'hyperapp';
 
-import { assignmentFrom } from '../models/assignment';
+import { assignment, assignmentFrom } from '../models/assignment';
 import Role from '../models/Role';
 import { CardJSON, toDesc } from '../models/trello';
 import User from '../models/User';
@@ -13,7 +13,7 @@ const t = TrelloPowerUp.iframe();
 const id: string = t.arg('id');
 const users: User[] = t.arg('users');
 const roles: Role[] = t.arg('roles');
-const assignments = t.arg('assignments');
+const assignments: assignment[] = t.arg('assignments');
 
 interface State {
   selectedRoleIndex: number | null;
@@ -38,30 +38,44 @@ type Actions = typeof actions;
 
 const view = (state: State, actions: Actions) =>
   h('div', {}, [
-    h('div', {}, [
-      h('h1', {}, '人'),
+    h('div', { className: 'list' }, [
+      h('h2', { className: 'list-title' }, '人'),
       ...users.map((user, i) =>
-        h('div', { onclick: () => actions.selectUser(i) }, [
-          h('input', {
-            id: `user-${i}`,
-            type: 'radio',
-            checked: i === state.selectedUserIndex
-          }),
-          h('label', { for: `user-${i}` }, user.name)
-        ])
+        h(
+          'div',
+          {
+            className: 'list-item',
+            onclick: () => actions.selectUser(i)
+          },
+          [
+            h('input', {
+              id: `user-${i}`,
+              type: 'radio',
+              checked: i === state.selectedUserIndex
+            }),
+            h('label', { for: `user-${i}` }, user.name)
+          ]
+        )
       )
     ]),
-    h('div', {}, [
-      h('h1', {}, '仕事'),
+    h('div', { className: 'list' }, [
+      h('h2', { className: 'list-title' }, '仕事'),
       ...roles.map((role, i) =>
-        h('div', { onclick: () => actions.selectRole(i) }, [
-          h('input', {
-            id: `role-${i}`,
-            type: 'radio',
-            checked: i === state.selectedRoleIndex
-          }),
-          h('label', { for: `role-${i}` }, role.name)
-        ])
+        h(
+          'div',
+          {
+            className: 'list-item',
+            onclick: () => actions.selectRole(i)
+          },
+          [
+            h('input', {
+              id: `role-${i}`,
+              type: 'radio',
+              checked: i === state.selectedRoleIndex
+            }),
+            h('label', { for: `role-${i}` }, role.name)
+          ]
+        )
       )
     ]),
     h(
@@ -70,7 +84,7 @@ const view = (state: State, actions: Actions) =>
         className: 'mod-primary',
         disabled:
           state.selectedRoleIndex === null || state.selectedUserIndex === null,
-        onClick: () => {
+        onclick: () => {
           if (
             state.selectedRoleIndex === null ||
             state.selectedUserIndex === null
@@ -84,6 +98,7 @@ const view = (state: State, actions: Actions) =>
             )
           );
           const desc = toDesc(assignments);
+          console.log('aushorized: ', Trello.authorized());
           new Promise((resolve: any, reject: any) =>
             Trello.put(
               `cards/${id}`,
@@ -92,7 +107,10 @@ const view = (state: State, actions: Actions) =>
                 console.log('PUT success:', card.id);
                 resolve();
               },
-              reject
+              (e: any) => {
+                console.error(e);
+                reject();
+              }
             )
           ).finally(() => t.closePopup());
         }
@@ -103,3 +121,4 @@ const view = (state: State, actions: Actions) =>
 
 const container = document.getElementById('app');
 app(state, actions, view, container);
+// TODO: adjust popup height

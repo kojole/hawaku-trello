@@ -1,4 +1,21 @@
-#app label {
+.list {
+  border-bottom: 1px solid #d6dadc;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+}
+
+.list-title {
+  color: #8c8c8c;
+  font-size: 14px;
+  margin: 0;
+  padding: 4px 12px;
+}
+
+.list-item {
+  padding: 6px 12px;
+}
+
+.list-item label {
   display: inline;
-  margin-left: 0.5rem;
+  margin-left: 0.5em;
 }

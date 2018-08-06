@@ -98,7 +98,23 @@ function addAssignment(t: any) {
     return authorize()
       .then(() => t.lists('all'))
       .then((lists: ListJSON[]) => {
-        const [users, roles] = fromListsJSONAll(lists);
+        let [users, roles] = fromListsJSONAll(lists);
+
+        users = users.filter(
+          user => !assignments.find(assignment => assignment.userId === user.id)
+        );
+        roles = roles.filter(
+          role => !assignments.find(assignment => assignment.roleId === role.id)
+        );
+
+        if (users.length === 0) {
+          console.log('No extra users');
+          return;
+        }
+        if (roles.length === 0) {
+          console.log('No extra roles');
+          return;
+        }
 
         return t.popup({
           title: '当番を追加する',
