@@ -4,6 +4,7 @@ export interface CardJSON {
   desc: string;
   labels: LabelJSON[];
   idLabels?: string[];
+  idList?: string;
 }
 
 export interface LabelJSON {

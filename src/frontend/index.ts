@@ -1,6 +1,7 @@
 import config from '@/config';
+import { assignment } from '../models/assignment';
 import { assignRolesToUsers, fromListsJSON } from '../models/index';
-import { CardJSON, ListJSON } from '../models/trello';
+import { CardJSON, ListJSON, parseDesc } from '../models/trello';
 
 const Trello = (<any>window).Trello;
 const Promise = (<any>window).TrelloPowerUp.Promise;
@@ -9,6 +10,8 @@ const WHITE_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
 const BLACK_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-black.svg';
+const GRAY_ICON =
+  'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-gray.svg';
 
 function authorize(): PromiseLike<any> {
   return new Promise((resolve: any, reject: any) => {
@@ -73,18 +76,59 @@ function doAssign(t: any, _opts: any) {
     });
 }
 
+function addAssignment(_t: any, _opts: any) {}
+
+function deleteAssignment(t: any, _opts: any) {
+  return t.card('idList', 'desc').then((card: CardJSON) => {
+    console.log(card);
+    if (card.idList !== config.idResultsList) {
+      console.log('Not a result card');
+      return;
+    }
+
+    const assignments: assignment[] = parseDesc(card.desc) || [];
+    if (!Array.isArray(assignments) || assignments.length === 0) {
+      console.log('No assignments');
+      return;
+    }
+
+    return t.popup({
+      title: '当番を削除する',
+      items: assignments.map((assignment, index) => ({
+        text: `${assignment.user} - ${assignment.role}`,
+        callback: (t: any) => {
+          console.log('Delete:', index);
+          return t.closePopup();
+        }
+      }))
+    });
+  });
+}
+
 (<any>window).TrelloPowerUp.initialize({
-  'board-buttons': function(_t: any, _opts: any) {
-    return [
-      {
-        icon: {
-          dark: WHITE_ICON,
-          light: BLACK_ICON
-        },
-        text: '当番を決める！',
-        callback: doAssign,
-        condition: 'edit'
-      }
-    ];
-  }
+  'board-buttons': (_t: any, _opts: any) => [
+    {
+      icon: {
+        dark: WHITE_ICON,
+        light: BLACK_ICON
+      },
+      text: '当番を決める！',
+      callback: doAssign,
+      condition: 'edit'
+    }
+  ],
+  'card-buttons': (_t: any, _opts: any) => [
+    {
+      icon: GRAY_ICON,
+      text: '当番を追加する',
+      callback: addAssignment,
+      condition: 'edit'
+    },
+    {
+      icon: GRAY_ICON,
+      text: '当番を削除する',
+      callback: deleteAssignment,
+      condition: 'edit'
+    }
+  ]
 });
