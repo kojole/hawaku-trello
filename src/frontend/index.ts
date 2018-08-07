@@ -5,8 +5,10 @@ import { assignment } from '../models/assignment';
 import {
   assignRolesToUsers,
   fromListsJSON,
-  fromListsJSONAll
+  fromListsJSONAll,
+  rolesFromListsJSON
 } from '../models/index';
+import User from '../models/User';
 import { CardJSON, ListJSON, parseDesc, toDesc } from '../models/trello';
 
 declare const Trello: any;
@@ -183,22 +185,31 @@ function cardBadges(t: any) {
     }
 
     return t.lists('all').then((lists: ListJSON[]) => {
-      let roles = fromListsJSONAll(lists)[1];
+      const user = User.fromJSON(card);
 
-      // TODO: dedup roles
+      let roles = rolesFromListsJSON(
+        lists,
+        true,
+        card =>
+          card.labels.find(label => label.id === config.idDupRoleLabel) ===
+          undefined
+      );
 
-      // Delete roles to have already done
-      const { stats }: { stats?: { [id: string]: number } } =
-        parseDesc(card.desc) || {};
-      if (stats) {
-        roles = roles.filter(role => stats[role.id] === undefined);
-      }
+      roles = roles.filter(role => {
+        if (role.sex > 0 && role.sex !== user.sex) {
+          return false;
+        }
+        if (user.stats.counts[role.id] !== undefined) {
+          return false;
+        }
+        return true;
+      });
 
       const badges = [];
       if (roles.length > 0) {
         badges.push({
-          text: `残り${roles.length}`,
-          color: 'yellow'
+          text: `残り手伝い ${roles.length}`,
+          color: 'light-gray'
         });
       }
       return badges;
