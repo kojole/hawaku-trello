@@ -40,8 +40,7 @@ module.exports = [
     output: {
       filename: 'bundle.js',
       path: __dirname + '/dist',
-      library: 'Hawaku',
-      libraryTarget: 'this'
+      library: 'Hawaku'
     },
     module: {
       rules: [

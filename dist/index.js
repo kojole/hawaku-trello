@@ -1,7 +1,7 @@
 function archiveOldResults() {
-  this.Hawaku.archiveOldResults();
+  Hawaku.archiveOldResults();
 }
 
 function updateUserStatsFromResults() {
-  this.Hawaku.updateUserStatsFromResults();
+  Hawaku.updateUserStatsFromResults();
 }
