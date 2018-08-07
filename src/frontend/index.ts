@@ -172,6 +172,40 @@ function deleteAssignment(t: any) {
   });
 }
 
+function cardBadges(t: any) {
+  return t.card('id', 'desc', 'labels', 'idList').then((card: CardJSON) => {
+    if (!config.idUsersLists.includes(card.idList as string)) {
+      return [];
+    }
+
+    if (!card.labels.map(label => label.id).includes(config.idNewcomerLabel)) {
+      return [];
+    }
+
+    return t.lists('all').then((lists: ListJSON[]) => {
+      let roles = fromListsJSONAll(lists)[1];
+
+      // TODO: dedup roles
+
+      // Delete roles to have already done
+      const { stats }: { stats?: { [id: string]: number } } =
+        parseDesc(card.desc) || {};
+      if (stats) {
+        roles = roles.filter(role => stats[role.id] === undefined);
+      }
+
+      const badges = [];
+      if (roles.length > 0) {
+        badges.push({
+          text: `残り${roles.length}`,
+          color: 'yellow'
+        });
+      }
+      return badges;
+    });
+  });
+}
+
 TrelloPowerUp.initialize({
   'board-buttons': (_t: any) => [
     {
@@ -184,6 +218,7 @@ TrelloPowerUp.initialize({
       condition: 'edit'
     }
   ],
+  'card-badges': cardBadges,
   'card-buttons': (_t: any) => [
     {
       icon: icons.plus,
