@@ -13,12 +13,15 @@ declare const Trello: any;
 declare const TrelloPowerUp: any;
 const Promise = TrelloPowerUp.Promise;
 
+const icons = {
+  plus: 'https://design.trello.com/img/icons/v3/plus.svg',
+  remove: 'https://design.trello.com/img/icons/v3/remove.svg'
+};
+
 const WHITE_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
 const BLACK_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-black.svg';
-const GRAY_ICON =
-  'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-gray.svg';
 
 function authorize(): Bluebird<any> {
   return new Promise((resolve: any, reject: any) => {
@@ -183,13 +186,13 @@ TrelloPowerUp.initialize({
   ],
   'card-buttons': (_t: any) => [
     {
-      icon: GRAY_ICON,
+      icon: icons.plus,
       text: '当番を追加する',
       callback: addAssignment,
       condition: 'edit'
     },
     {
-      icon: GRAY_ICON,
+      icon: icons.remove,
       text: '当番を削除する',
       callback: deleteAssignment,
       condition: 'edit'
