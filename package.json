@@ -1,6 +1,6 @@
 {
   "name": "hawaku-trello",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Yuichi Tanikawa <kojole.jp@gmail.com>",
   "dependencies": {
     "core-js": "^2.5.7",
