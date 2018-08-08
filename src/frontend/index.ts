@@ -4,9 +4,8 @@ import config from '@/config';
 import { assignment } from '../models/assignment';
 import {
   assignRolesToUsers,
-  fromListsJSON,
-  fromListsJSONAll,
-  rolesFromListsJSON
+  rolesFromListsJSON,
+  usersFromListsJSON
 } from '../models/index';
 import Role from '../models/Role';
 import User from '../models/User';
@@ -48,15 +47,18 @@ function doAssign(t: any) {
   return authorize()
     .then(() => t.lists('all'))
     .then((lists: ListJSON[]) => {
-      const [users, roles] = fromListsJSON(lists);
+      const users = usersFromListsJSON(lists);
       if (users.length === 0) {
         console.log('No users');
         return;
       }
+
+      const roles = rolesFromListsJSON(lists);
       if (roles.length === 0) {
         console.log('No roles');
         return;
       }
+
       const assignments = assignRolesToUsers(users, roles);
 
       const idList = config.idResultsList;
@@ -105,19 +107,17 @@ function addAssignment(t: any) {
     return authorize()
       .then(() => t.lists('all'))
       .then((lists: ListJSON[]) => {
-        let [users, roles] = fromListsJSONAll(lists);
-
-        users = users.filter(
+        const users = usersFromListsJSON(lists, true).filter(
           user => !assignments.find(assignment => assignment.userId === user.id)
         );
-        roles = roles.filter(
-          role => !assignments.find(assignment => assignment.roleId === role.id)
-        );
-
         if (users.length === 0) {
           console.log('No extra users');
           return;
         }
+
+        const roles = rolesFromListsJSON(lists, true).filter(
+          role => !assignments.find(assignment => assignment.roleId === role.id)
+        );
         if (roles.length === 0) {
           console.log('No extra roles');
           return;
