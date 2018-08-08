@@ -16,6 +16,7 @@ declare const TrelloPowerUp: any;
 const Promise = TrelloPowerUp.Promise;
 
 const icons = {
+  help: 'https://design.trello.com/img/icons/v3/trellistplus.svg',
   plus: 'https://design.trello.com/img/icons/v3/plus.svg',
   remove: 'https://design.trello.com/img/icons/v3/remove.svg'
 };
@@ -175,6 +176,59 @@ function deleteAssignment(t: any) {
   });
 }
 
+function addHelp(t: any) {
+  return t.card('id', 'desc', 'labels', 'idList').then((card: CardJSON) => {
+    if (!config.idUsersLists.includes(card.idList as string)) {
+      console.log('Not a user card');
+      return;
+    }
+
+    if (!card.labels.find(label => label.id === config.idNewcomerLabel)) {
+      console.log('Not a newcomer user card');
+      return;
+    }
+
+    return t.lists('all').then((lists: ListJSON[]) => {
+      const user = User.fromJSON(card);
+      const roles = rolesFromListsJSON(lists, true);
+      const undoneRoles = user.undoneRoles(roles);
+
+      if (undoneRoles.length === 0) {
+        console.log('No undone roles');
+        return;
+      }
+
+      return t.popup({
+        title: '手伝いを追加する',
+        items: undoneRoles.map(role => ({
+          text: role.name,
+          callback: (t: any) => {
+            user.stats.counts[role.id] = 0;
+            const desc = user.newDesc();
+
+            return authorize()
+              .then(
+                () =>
+                  new Promise((resolve: any, reject: any) =>
+                    Trello.put(
+                      `cards/${card.id}`,
+                      { desc },
+                      (card: CardJSON) => {
+                        console.log('PUT success:', card.id);
+                        resolve();
+                      },
+                      reject
+                    )
+                  )
+              )
+              .finally(() => t.closePopup());
+          }
+        }))
+      });
+    });
+  });
+}
+
 function cardBadgesCb(detail: boolean = false) {
   const toBadges = detail
     ? (roles: Role[]) =>
@@ -229,6 +283,12 @@ TrelloPowerUp.initialize({
       icon: icons.remove,
       text: '当番を削除する',
       callback: deleteAssignment,
+      condition: 'edit'
+    },
+    {
+      icon: icons.help,
+      text: '手伝いを記録する',
+      callback: addHelp,
       condition: 'edit'
     }
   ]
