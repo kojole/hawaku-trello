@@ -8,6 +8,7 @@ import {
   fromListsJSONAll,
   rolesFromListsJSON
 } from '../models/index';
+import Role from '../models/Role';
 import User from '../models/User';
 import { CardJSON, ListJSON, parseDesc, toDesc } from '../models/trello';
 
@@ -174,47 +175,33 @@ function deleteAssignment(t: any) {
   });
 }
 
-function cardBadges(t: any) {
-  return t.card('id', 'desc', 'labels', 'idList').then((card: CardJSON) => {
-    if (!config.idUsersLists.includes(card.idList as string)) {
-      return [];
-    }
+function cardBadgesCb(detail: boolean = false) {
+  const toBadges = detail
+    ? (roles: Role[]) =>
+        roles.map(role => ({ title: '未経験', text: role.name }))
+    : (roles: Role[]) =>
+        roles.length > 0
+          ? [{ text: `未経験残り ${roles.length}`, color: 'light-gray' }]
+          : [];
 
-    if (!card.labels.map(label => label.id).includes(config.idNewcomerLabel)) {
-      return [];
-    }
-
-    return t.lists('all').then((lists: ListJSON[]) => {
-      const user = User.fromJSON(card);
-
-      let roles = rolesFromListsJSON(
-        lists,
-        true,
-        card =>
-          card.labels.find(label => label.id === config.idDupRoleLabel) ===
-          undefined
-      );
-
-      roles = roles.filter(role => {
-        if (role.sex > 0 && role.sex !== user.sex) {
-          return false;
-        }
-        if (user.stats.counts[role.id] !== undefined) {
-          return false;
-        }
-        return true;
-      });
-
-      const badges = [];
-      if (roles.length > 0) {
-        badges.push({
-          text: `残り手伝い ${roles.length}`,
-          color: 'light-gray'
-        });
+  return (t: any) =>
+    t.card('id', 'desc', 'labels', 'idList').then((card: CardJSON) => {
+      if (!config.idUsersLists.includes(card.idList as string)) {
+        return [];
       }
-      return badges;
+
+      if (!card.labels.find(label => label.id === config.idNewcomerLabel)) {
+        return [];
+      }
+
+      return t.lists('all').then((lists: ListJSON[]) => {
+        const user = User.fromJSON(card);
+        const roles = rolesFromListsJSON(lists, true);
+        const undoneRoles = user.undoneRoles(roles);
+
+        return toBadges(undoneRoles);
+      });
     });
-  });
 }
 
 TrelloPowerUp.initialize({
@@ -229,7 +216,8 @@ TrelloPowerUp.initialize({
       condition: 'edit'
     }
   ],
-  'card-badges': cardBadges,
+  'card-badges': cardBadgesCb(),
+  'card-detail-badges': cardBadgesCb(true),
   'card-buttons': (_t: any) => [
     {
       icon: icons.plus,

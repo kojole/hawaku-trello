@@ -1,12 +1,11 @@
 import config from '@/config';
 import { assignment, assignmentFrom } from './assignment';
 import Role from './Role';
-import { CardJSON, ListJSON } from './trello';
+import { ListJSON } from './trello';
 import User from './User';
 import { shuffle } from '../random';
 
 type listFilterFn = (list: ListJSON) => boolean;
-type cardFilterFn = (card: CardJSON) => boolean;
 
 export function fromListsJSON(lists: ListJSON[]): [User[], Role[]] {
   const usersList = lists.find(list => list.id === config.idUsersLists[0]);
@@ -37,21 +36,14 @@ export function fromListsJSONAll(lists: ListJSON[]): [User[], Role[]] {
 
 export function rolesFromListsJSON(
   lists: ListJSON[],
-  all: boolean = false,
-  cardFilter?: cardFilterFn
+  all: boolean = false
 ): Role[] {
   const listFilter: listFilterFn = all
     ? list => config.idRolesLists.includes(list.id)
     : list => config.idUsersLists[0] === list.id;
-  const rolesLists = lists.filter(listFilter);
 
   return ([] as Role[]).concat(
-    ...rolesLists.map(list => {
-      if (cardFilter) {
-        return list.cards.filter(cardFilter).map(Role.fromJSON);
-      }
-      return list.cards.map(Role.fromJSON);
-    })
+    ...lists.filter(listFilter).map(list => list.cards.map(Role.fromJSON))
   );
 }
 

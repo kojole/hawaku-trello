@@ -1,4 +1,5 @@
 import { sex, sexFromJSON } from './sex';
+import Role from './Role';
 import Stats from './Stats';
 import { CardJSON, parseDesc } from './trello';
 
@@ -26,6 +27,15 @@ export default class User {
   newDesc(): string {
     const meta = { stats: this.stats, updatedAt: this.updatedAt };
     return '```json\n' + JSON.stringify(meta, null, 2) + '\n```';
+  }
+
+  undoneRoles(roles: Role[]): Role[] {
+    return roles.filter(
+      role =>
+        !role.dup &&
+        (role.sex === 0 || role.sex === this.sex) &&
+        this.stats.counts[role.id] === undefined
+    );
   }
 
   wasAssignedTo(id: string, date: Date) {
