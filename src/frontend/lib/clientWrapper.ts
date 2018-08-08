@@ -28,7 +28,7 @@ export function put(
   params: any,
   bluebird: typeof Bluebird
 ): Bluebird<void> {
-  return authorize(bluebird, trello).then(
+  return authorize(trello, bluebird).then(
     () =>
       new bluebird((resolve, reject) =>
         trello.put(
