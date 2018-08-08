@@ -1,6 +1,7 @@
 import * as Bluebird from 'bluebird';
 
 import config from '@/config';
+import { authorize, put } from './lib/clientWrapper';
 import { assignment } from '../models/assignment';
 import {
   assignRolesToUsers,
@@ -13,7 +14,7 @@ import { CardJSON, ListJSON, parseDesc, toDesc } from '../models/trello';
 
 declare const Trello: any;
 declare const TrelloPowerUp: any;
-const Promise = TrelloPowerUp.Promise;
+const Promise = TrelloPowerUp.Promise as typeof Bluebird;
 
 const icons = {
   help: 'https://design.trello.com/img/icons/v3/trellistplus.svg',
@@ -26,28 +27,10 @@ const WHITE_ICON =
 const BLACK_ICON =
   'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-black.svg';
 
-function authorize(): Bluebird<any> {
-  return new Promise((resolve: any, reject: any) => {
-    Trello.authorize({
-      type: 'popup',
-      name: 'hawaku-trello',
-      scope: {
-        write: true
-      },
-      expiration: 'never',
-      success: resolve,
-      error: () => {
-        console.log('Authentication failed');
-        reject();
-      }
-    });
-  });
-}
-
 function doAssign(t: any) {
-  return authorize()
-    .then(() => t.lists('all'))
-    .then((lists: ListJSON[]) => {
+  return authorize(Trello, Promise)
+    .then<ListJSON[]>(() => t.lists('all'))
+    .then<void>(lists => {
       const users = usersFromListsJSON(lists);
       if (users.length === 0) {
         console.log('No users');
@@ -105,7 +88,7 @@ function addAssignment(t: any) {
       assignments = [];
     }
 
-    return authorize()
+    return authorize(Trello, Promise)
       .then(() => t.lists('all'))
       .then((lists: ListJSON[]) => {
         const users = usersFromListsJSON(lists, true).filter(
@@ -154,22 +137,9 @@ function deleteAssignment(t: any) {
           assignments.splice(index, 1);
           const desc = toDesc(assignments);
 
-          return authorize()
-            .then(
-              () =>
-                new Promise((resolve: any, reject: any) =>
-                  Trello.put(
-                    `cards/${card.id}`,
-                    { desc },
-                    (card: CardJSON) => {
-                      console.log('PUT success:', card.id);
-                      resolve();
-                    },
-                    reject
-                  )
-                )
-            )
-            .finally(() => t.closePopup());
+          return put(Trello, `cards/${card.id}`, { desc }, Promise).finally(
+            () => t.closePopup()
+          );
         }
       }))
     });
@@ -206,22 +176,9 @@ function addHelp(t: any) {
             user.stats.counts[role.id] = 0;
             const desc = user.newDesc();
 
-            return authorize()
-              .then(
-                () =>
-                  new Promise((resolve: any, reject: any) =>
-                    Trello.put(
-                      `cards/${card.id}`,
-                      { desc },
-                      (card: CardJSON) => {
-                        console.log('PUT success:', card.id);
-                        resolve();
-                      },
-                      reject
-                    )
-                  )
-              )
-              .finally(() => t.closePopup());
+            return put(Trello, `cards/${card.id}`, { desc }, Promise).finally(
+              () => t.closePopup()
+            );
           }
         }))
       });
@@ -235,7 +192,7 @@ function cardBadgesCb(detail: boolean = false) {
         roles.map(role => ({ title: '未経験', text: role.name }))
     : (roles: Role[]) =>
         roles.length > 0
-          ? [{ text: `未経験残り ${roles.length}`, color: 'light-gray' }]
+          ? [{ text: `未経験 ${roles.length}`, color: 'light-gray' }]
           : [];
 
   return (t: any) =>
