@@ -17,6 +17,10 @@ declare const TrelloPowerUp: any;
 const Promise = TrelloPowerUp.Promise as typeof Bluebird;
 
 const icons = {
+  question: {
+    dark: location.origin + '/img/question-circle-solid-white.svg',
+    light: location.origin + '/img/question-circle-solid-black.svg'
+  },
   random: {
     dark: location.origin + '/img/random-solid-white.svg',
     light: location.origin + '/img/random-solid-black.svg'
@@ -25,6 +29,14 @@ const icons = {
   plus: 'https://design.trello.com/img/icons/v3/plus.svg',
   remove: 'https://design.trello.com/img/icons/v3/remove.svg'
 };
+
+function count(t: any) {
+  return t.lists('all').then((lists: ListJSON[]) => {
+    const users = usersFromListsJSON(lists);
+    const roles = rolesFromListsJSON(lists);
+    alert(`する人：${users.length}\nする仕事：${roles.length}`);
+  });
+}
 
 function doAssign(t: any) {
   return authorize(Trello, Promise)
@@ -216,6 +228,11 @@ function cardBadgesCb(detail: boolean = false) {
 
 TrelloPowerUp.initialize({
   'board-buttons': (_t: any) => [
+    {
+      icon: icons.question,
+      text: 'カウント',
+      callback: count
+    },
     {
       icon: icons.random,
       text: '当番を決める',
