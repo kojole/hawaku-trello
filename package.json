@@ -1,6 +1,6 @@
 {
   "name": "hawaku-trello",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Yuichi Tanikawa <kojole.jp@gmail.com>",
   "dependencies": {
     "core-js": "^2.5.7",
@@ -45,6 +45,7 @@
   "private": true,
   "scripts": {
     "build": "webpack",
+    "deploy:gas": "npm run build && clasp push",
     "test": "jest"
   }
 }
