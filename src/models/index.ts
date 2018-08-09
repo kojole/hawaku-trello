@@ -1,36 +1,35 @@
 import config from '@/config';
 import { assignment, assignmentFrom } from './assignment';
 import Role from './Role';
-import { ListJSON } from './trello';
+import { ListJSON, CardJSON } from './trello';
 import User from './User';
 import { shuffle } from '../random';
 
-export function fromListsJSON(lists: ListJSON[]): [User[], Role[]] {
-  const usersList = lists.find(list => list.id === config.idUsersLists[0]);
-  const rolesList = lists.find(list => list.id === config.idRolesLists[0]);
-  return [
-    usersList ? usersList.cards.map(User.fromJSON) : [],
-    rolesList ? rolesList.cards.map(Role.fromJSON) : []
-  ];
+type listPredicate = (list: ListJSON) => boolean;
+
+function fromListsJSONFn<T>(
+  idLists: string[],
+  fromJSON: (card: CardJSON) => T
+): (lists: ListJSON[], all?: boolean) => T[] {
+  return (lists, all = false) => {
+    const predicate: listPredicate = all
+      ? list => idLists.includes(list.id)
+      : list => idLists[0] === list.id;
+    return ([] as T[]).concat(
+      ...lists.filter(predicate).map(list => list.cards.map(fromJSON))
+    );
+  };
 }
 
-export function fromListsJSONAll(lists: ListJSON[]): [User[], Role[]] {
-  const usersLists = lists.filter(list =>
-    config.idUsersLists.includes(list.id)
-  );
-  const rolesLists = lists.filter(list =>
-    config.idRolesLists.includes(list.id)
-  );
+export const rolesFromListsJSON = fromListsJSONFn(
+  config.idRolesLists,
+  Role.fromJSON
+);
 
-  return [
-    ([] as User[]).concat(
-      ...usersLists.map(list => list.cards.map(User.fromJSON))
-    ),
-    ([] as Role[]).concat(
-      ...rolesLists.map(list => list.cards.map(Role.fromJSON))
-    )
-  ];
-}
+export const usersFromListsJSON = fromListsJSONFn(
+  config.idUsersLists,
+  User.fromJSON
+);
 
 export function assignRolesToUsers(users: User[], roles: Role[]): assignment[] {
   const assignments: assignment[] = [];

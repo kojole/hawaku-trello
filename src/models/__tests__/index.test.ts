@@ -1,7 +1,11 @@
 import Role from '../Role';
 import Stats from '../Stats';
 import User from '../User';
-import { assignRolesToUsers, fromListsJSON } from '../index';
+import {
+  assignRolesToUsers,
+  rolesFromListsJSON,
+  usersFromListsJSON
+} from '../index';
 
 const defaultDate = new Date('2018-07-27T04:44:00.000Z');
 
@@ -61,7 +65,8 @@ const defaultRoles = () => [
 
 test('fromListsJSON', () => {
   const json = require('./fixtures/lists.json');
-  const [users, roles] = fromListsJSON(json);
+  const users = usersFromListsJSON(json);
+  const roles = rolesFromListsJSON(json);
 
   expect(users).toEqual(defaultUsers());
   expect(roles).toEqual(defaultRoles());

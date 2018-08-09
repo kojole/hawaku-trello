@@ -5,7 +5,7 @@ interface Counts {
 export default class Stats {
   total: number;
 
-  constructor(private counts: Counts) {
+  constructor(public counts: Counts) {
     this.total = Object.values(counts).reduce((acc, crr) => acc + crr, 0);
   }
 

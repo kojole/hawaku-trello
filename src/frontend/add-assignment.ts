@@ -1,33 +1,16 @@
 import * as Bluebird from 'bluebird';
 import { app, h } from 'hyperapp';
 
+import { put } from './lib/clientWrapper';
 import { assignment, assignmentFrom } from '../models/assignment';
 import Role from '../models/Role';
-import { CardJSON, toDesc } from '../models/trello';
+import { toDesc } from '../models/trello';
 import User from '../models/User';
 
 declare const Trello: any;
 declare const TrelloPowerUp: any;
-const Promise = TrelloPowerUp.Promise;
+const Promise = TrelloPowerUp.Promise as typeof Bluebird;
 const t = TrelloPowerUp.iframe();
-
-function authorize(): Bluebird<any> {
-  return new Promise((resolve: any, reject: any) => {
-    Trello.authorize({
-      type: 'popup',
-      name: 'hawaku-trello',
-      scope: {
-        write: true
-      },
-      expiration: 'never',
-      success: resolve,
-      error: () => {
-        console.log('Authentication failed');
-        reject();
-      }
-    });
-  });
-}
 
 const id: string = t.arg('id');
 const users: User[] = t.arg('users');
@@ -55,6 +38,35 @@ const actions = {
 
 type Actions = typeof actions;
 
+interface RadioListProps {
+  title: string;
+  idPrefix: string;
+  items: { name: string }[];
+  selectedIndex: number | null;
+  select: (i: number) => void;
+}
+
+const RadioList = ({
+  title,
+  idPrefix,
+  items,
+  selectedIndex,
+  select
+}: RadioListProps) =>
+  h('div', { class: 'list' }, [
+    h('h2', { class: 'list-title' }, title),
+    ...items.map((item, i) =>
+      h('div', { class: 'list-item', onclick: () => select(i) }, [
+        h('input', {
+          id: `${idPrefix}-${i}`,
+          type: 'radio',
+          checked: i === selectedIndex
+        }),
+        h('label', { for: `${idPrefix}-${i}` }, item.name)
+      ])
+    )
+  ]);
+
 const view = (state: State, actions: Actions) =>
   h(
     'div',
@@ -62,46 +74,20 @@ const view = (state: State, actions: Actions) =>
       oncreate: () => t.sizeTo('#app')
     },
     [
-      h('div', { class: 'list' }, [
-        h('h2', { class: 'list-title' }, '人'),
-        ...users.map((user, i) =>
-          h(
-            'div',
-            {
-              class: 'list-item',
-              onclick: () => actions.selectUser(i)
-            },
-            [
-              h('input', {
-                id: `user-${i}`,
-                type: 'radio',
-                checked: i === state.selectedUserIndex
-              }),
-              h('label', { for: `user-${i}` }, user.name)
-            ]
-          )
-        )
-      ]),
-      h('div', { class: 'list' }, [
-        h('h2', { class: 'list-title' }, '仕事'),
-        ...roles.map((role, i) =>
-          h(
-            'div',
-            {
-              class: 'list-item',
-              onclick: () => actions.selectRole(i)
-            },
-            [
-              h('input', {
-                id: `role-${i}`,
-                type: 'radio',
-                checked: i === state.selectedRoleIndex
-              }),
-              h('label', { for: `role-${i}` }, role.name)
-            ]
-          )
-        )
-      ]),
+      RadioList({
+        title: '人',
+        idPrefix: 'user',
+        items: users,
+        selectedIndex: state.selectedUserIndex,
+        select: i => actions.selectUser(i)
+      }),
+      RadioList({
+        title: '仕事',
+        idPrefix: 'role',
+        items: roles,
+        selectedIndex: state.selectedRoleIndex,
+        select: i => actions.selectRole(i)
+      }),
       h(
         'button',
         {
@@ -123,18 +109,9 @@ const view = (state: State, actions: Actions) =>
               )
             );
             const desc = toDesc(assignments);
-            authorize().then(() =>
-              new Promise((resolve: any, reject: any) =>
-                Trello.put(
-                  `cards/${id}`,
-                  { desc },
-                  (card: CardJSON) => {
-                    console.log('PUT success:', card.id);
-                    resolve();
-                  },
-                  reject
-                )
-              ).finally(() => t.closePopup())
+
+            put(Trello, `cards/${id}`, { desc }, Promise).finally(() =>
+              t.closePopup()
             );
           }
         },
