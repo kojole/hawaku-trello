@@ -2,7 +2,7 @@ import * as Bluebird from 'bluebird';
 import { app, h } from 'hyperapp';
 
 import { put } from './lib/clientWrapper';
-import { assignment, assignmentFrom } from '../models/assignment';
+import { assignment, assignmentFrom, display } from '../models/assignment';
 import Role from '../models/Role';
 import { toDesc } from '../models/trello';
 import User from '../models/User';
@@ -108,7 +108,7 @@ const view = (state: State, actions: Actions) =>
                 roles[state.selectedRoleIndex] as Role
               )
             );
-            const desc = toDesc(assignments);
+            const desc = toDesc(assignments, display);
 
             put(Trello, `cards/${id}`, { desc }, Promise).finally(() =>
               t.closePopup()

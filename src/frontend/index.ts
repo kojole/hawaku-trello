@@ -2,7 +2,7 @@ import * as Bluebird from 'bluebird';
 
 import config from '@/config';
 import { authorize, put } from './lib/clientWrapper';
-import { assignment } from '../models/assignment';
+import { assignment, display } from '../models/assignment';
 import {
   assignRolesToUsers,
   rolesFromListsJSON,
@@ -55,7 +55,7 @@ function doAssign(t: any) {
         minute: 'numeric',
         second: 'numeric'
       }).format(new Date());
-      const desc = toDesc(assignments);
+      const desc = toDesc(assignments, display);
 
       return new Promise((resolve: any, reject: any) =>
         Trello.post(
@@ -135,7 +135,7 @@ function deleteAssignment(t: any) {
         text: `${assignment.user} - ${assignment.role}`,
         callback: (t: any) => {
           assignments.splice(index, 1);
-          const desc = toDesc(assignments);
+          const desc = toDesc(assignments, display);
 
           return put(Trello, `cards/${card.id}`, { desc }, Promise).finally(
             () => t.closePopup()
