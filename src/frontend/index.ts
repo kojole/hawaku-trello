@@ -218,9 +218,8 @@ TrelloPowerUp.initialize({
   'board-buttons': (_t: any) => [
     {
       icon: icons.random,
-      text: '当番を決める！',
-      callback: doAssign,
-      condition: 'edit'
+      text: '当番を決める',
+      callback: doAssign
     }
   ],
   'card-badges': cardBadgesCb(),
@@ -229,20 +228,17 @@ TrelloPowerUp.initialize({
     {
       icon: icons.plus,
       text: '当番を追加する',
-      callback: addAssignment,
-      condition: 'edit'
+      callback: addAssignment
     },
     {
       icon: icons.remove,
       text: '当番を削除する',
-      callback: deleteAssignment,
-      condition: 'edit'
+      callback: deleteAssignment
     },
     {
       icon: icons.help,
       text: '手伝いを記録する',
-      callback: addHelp,
-      condition: 'edit'
+      callback: addHelp
     }
   ]
 });
