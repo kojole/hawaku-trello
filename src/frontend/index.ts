@@ -17,15 +17,26 @@ declare const TrelloPowerUp: any;
 const Promise = TrelloPowerUp.Promise as typeof Bluebird;
 
 const icons = {
+  question: {
+    dark: location.origin + '/img/question-circle-solid-white.svg',
+    light: location.origin + '/img/question-circle-solid-black.svg'
+  },
+  random: {
+    dark: location.origin + '/img/random-solid-white.svg',
+    light: location.origin + '/img/random-solid-black.svg'
+  },
   help: 'https://design.trello.com/img/icons/v3/trellistplus.svg',
   plus: 'https://design.trello.com/img/icons/v3/plus.svg',
   remove: 'https://design.trello.com/img/icons/v3/remove.svg'
 };
 
-const WHITE_ICON =
-  'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
-const BLACK_ICON =
-  'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-black.svg';
+function count(t: any) {
+  return t.lists('all').then((lists: ListJSON[]) => {
+    const users = usersFromListsJSON(lists);
+    const roles = rolesFromListsJSON(lists);
+    alert(`する人：${users.length}\nする仕事：${roles.length}`);
+  });
+}
 
 function doAssign(t: any) {
   return authorize(Trello, Promise)
@@ -218,13 +229,14 @@ function cardBadgesCb(detail: boolean = false) {
 TrelloPowerUp.initialize({
   'board-buttons': (_t: any) => [
     {
-      icon: {
-        dark: WHITE_ICON,
-        light: BLACK_ICON
-      },
-      text: '当番を決める！',
-      callback: doAssign,
-      condition: 'edit'
+      icon: icons.question,
+      text: 'カウント',
+      callback: count
+    },
+    {
+      icon: icons.random,
+      text: '当番を決める',
+      callback: doAssign
     }
   ],
   'card-badges': cardBadgesCb(),
@@ -233,20 +245,17 @@ TrelloPowerUp.initialize({
     {
       icon: icons.plus,
       text: '当番を追加する',
-      callback: addAssignment,
-      condition: 'edit'
+      callback: addAssignment
     },
     {
       icon: icons.remove,
       text: '当番を削除する',
-      callback: deleteAssignment,
-      condition: 'edit'
+      callback: deleteAssignment
     },
     {
       icon: icons.help,
       text: '手伝いを記録する',
-      callback: addHelp,
-      condition: 'edit'
+      callback: addHelp
     }
   ]
 });
