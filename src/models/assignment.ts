@@ -20,3 +20,9 @@ export function assignmentFrom(
     roleId: role ? role.id : 'NULL'
   };
 }
+
+export function display(assignments: assignment[]): string {
+  return assignments
+    .map(assignment => `- ${assignment.user} - ${assignment.role}`)
+    .join('\n');
+}

@@ -19,7 +19,7 @@ export interface ListJSON {
 
 export function parseDesc(desc: string): any {
   desc = desc.trim();
-  const re = /^```json\n([\s\S]*)\n```$/;
+  const re = /```json\n([\s\S]*)\n```/;
   const found = desc.match(re);
   if (found) {
     try {
@@ -31,6 +31,10 @@ export function parseDesc(desc: string): any {
   return null;
 }
 
-export function toDesc(object: any): string {
-  return '```json\n' + JSON.stringify(object, null, 2) + '\n```';
+export function toDesc<T>(object: T, display?: (object: T) => string): string {
+  const jsonString = '```json\n' + JSON.stringify(object, null, 2) + '\n```';
+  if (display) {
+    return display(object) + '\n\n' + jsonString;
+  }
+  return jsonString;
 }
