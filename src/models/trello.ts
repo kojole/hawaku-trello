@@ -36,7 +36,7 @@ export function parseDesc(desc: string): any {
 }
 
 export function toDesc<T>(object: T, display?: (object: T) => string): string {
-  const jsonString = '```json\n' + JSON.stringify(object) + '\n```';
+  const jsonString = '```json\n' + JSON.stringify(object, null, 2) + '\n```';
   if (display) {
     return display(object) + '\n\n' + jsonString;
   }
