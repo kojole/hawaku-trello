@@ -18,13 +18,9 @@ export interface ListJSON {
 }
 
 export function parseDesc(desc: string): any {
-  const jsonString =
-    desc
-      .trim()
-      .split('\n\n')
-      .pop() || '';
-  const re = /^```json\n([\s\S]*)\n```$/;
-  const found = jsonString.match(re);
+  desc = desc.trim();
+  const re = /```json\n([\s\S]*)\n```/;
+  const found = desc.match(re);
   if (found) {
     try {
       return JSON.parse(found[1]);
