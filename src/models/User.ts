@@ -1,7 +1,7 @@
 import { sex, sexFromJSON } from './sex';
 import Role from './Role';
 import Stats from './Stats';
-import { CardJSON, parseDesc } from './trello';
+import { CardJSON, parseDesc, toDesc } from './trello';
 
 interface MetaJSON {
   stats: { [roleId: string]: number };
@@ -25,8 +25,7 @@ export default class User {
   ) {}
 
   newDesc(): string {
-    const meta = { stats: this.stats, updatedAt: this.updatedAt };
-    return '```json\n' + JSON.stringify(meta, null, 2) + '\n```';
+    return toDesc({ stats: this.stats, updatedAt: this.updatedAt });
   }
 
   undoneRoles(roles: Role[]): Role[] {
