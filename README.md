@@ -5,7 +5,7 @@
 関係者向けの掃除当番決めツールです。
 Trello のチーム内限定 Power-Up として運用しています。
 
-![スクリーンショット](screenshot.png)
+![スクリーンショット](screenshot.png)
 
 ## 機能
 
